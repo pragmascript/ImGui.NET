@@ -74,6 +74,28 @@ namespace ImGuiNET
             _gd.Dispose();
         }
 
+        private static void DrawTestWindow() {
+            ImGui.Begin("TestWindow");
+
+            Vector2 cursorPos;
+
+            cursorPos = ImGui.GetCursorPos();
+            ImGui.Button("more button 1");
+            cursorPos = ImGui.GetCursorPos();
+            ImGui.Button("more button 2");
+            cursorPos = ImGui.GetCursorPos();
+
+            var tempCursorPos = ImGui.GetCursorPos();
+            ImGui.SetCursorPos(tempCursorPos);
+
+            ImGui.Button("more button 3");
+            cursorPos = ImGui.GetCursorPos();
+            ImGui.Button("more button 4");
+            cursorPos = ImGui.GetCursorPos();
+
+            ImGui.End();
+        }
+
         private static unsafe void SubmitUI()
         {
             // Demo code adapted from the official Dear ImGui demo program:
@@ -101,6 +123,8 @@ namespace ImGuiNET
                 float framerate = ImGui.GetIO().Framerate;
                 ImGui.Text($"Application average {1000.0f / framerate:0.##} ms/frame ({framerate:0.#} FPS)");
             }
+
+            DrawTestWindow();
 
             // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
             if (_showAnotherWindow)
