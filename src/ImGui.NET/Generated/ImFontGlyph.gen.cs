@@ -26,15 +26,15 @@ namespace ImGuiNET
         public static implicit operator ImFontGlyphPtr(ImFontGlyph* nativePtr) => new ImFontGlyphPtr(nativePtr);
         public static implicit operator ImFontGlyph* (ImFontGlyphPtr wrappedPtr) => wrappedPtr.NativePtr;
         public static implicit operator ImFontGlyphPtr(IntPtr nativePtr) => new ImFontGlyphPtr(nativePtr);
-        public ref ushort Codepoint => ref Unsafe.AsRef<ushort>(&NativePtr->Codepoint);
-        public ref float AdvanceX => ref Unsafe.AsRef<float>(&NativePtr->AdvanceX);
-        public ref float X0 => ref Unsafe.AsRef<float>(&NativePtr->X0);
-        public ref float Y0 => ref Unsafe.AsRef<float>(&NativePtr->Y0);
-        public ref float X1 => ref Unsafe.AsRef<float>(&NativePtr->X1);
-        public ref float Y1 => ref Unsafe.AsRef<float>(&NativePtr->Y1);
-        public ref float U0 => ref Unsafe.AsRef<float>(&NativePtr->U0);
-        public ref float V0 => ref Unsafe.AsRef<float>(&NativePtr->V0);
-        public ref float U1 => ref Unsafe.AsRef<float>(&NativePtr->U1);
-        public ref float V1 => ref Unsafe.AsRef<float>(&NativePtr->V1);
+        public ushort* Codepoint => (ushort*) &NativePtr->Codepoint;
+        public float* AdvanceX => (float*) &NativePtr->AdvanceX;
+        public float* X0 => (float*) &NativePtr->X0;
+        public float* Y0 => (float*) &NativePtr->Y0;
+        public float* X1 => (float*) &NativePtr->X1;
+        public float* Y1 => (float*) &NativePtr->Y1;
+        public float* U0 => (float*) &NativePtr->U0;
+        public float* V0 => (float*) &NativePtr->V0;
+        public float* U1 => (float*) &NativePtr->U1;
+        public float* V1 => (float*) &NativePtr->V1;
     }
 }

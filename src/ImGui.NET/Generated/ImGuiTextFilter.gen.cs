@@ -21,7 +21,7 @@ namespace ImGuiNET
         public static implicit operator ImGuiTextFilterPtr(IntPtr nativePtr) => new ImGuiTextFilterPtr(nativePtr);
         public RangeAccessor<byte> InputBuf => new RangeAccessor<byte>(NativePtr->InputBuf, 256);
         public ImVector<TextRange> Filters => new ImVector<TextRange>(NativePtr->Filters);
-        public ref int CountGrep => ref Unsafe.AsRef<int>(&NativePtr->CountGrep);
+        public int* CountGrep => (int*) &NativePtr->CountGrep;
         public void Build()
         {
             ImGuiNative.ImGuiTextFilter_Build(NativePtr);

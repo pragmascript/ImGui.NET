@@ -17,7 +17,7 @@ namespace ImGuiNET
         public static implicit operator ImColorPtr(ImColor* nativePtr) => new ImColorPtr(nativePtr);
         public static implicit operator ImColor* (ImColorPtr wrappedPtr) => wrappedPtr.NativePtr;
         public static implicit operator ImColorPtr(IntPtr nativePtr) => new ImColorPtr(nativePtr);
-        public ref Vector4 Value => ref Unsafe.AsRef<Vector4>(&NativePtr->Value);
+        public Vector4* Value => (Vector4*) &NativePtr->Value;
         public void SetHSV(float h, float s, float v)
         {
             float a = 1.0f;

@@ -21,10 +21,10 @@ namespace ImGuiNET
         public static implicit operator ImDrawCmdPtr(ImDrawCmd* nativePtr) => new ImDrawCmdPtr(nativePtr);
         public static implicit operator ImDrawCmd* (ImDrawCmdPtr wrappedPtr) => wrappedPtr.NativePtr;
         public static implicit operator ImDrawCmdPtr(IntPtr nativePtr) => new ImDrawCmdPtr(nativePtr);
-        public ref uint ElemCount => ref Unsafe.AsRef<uint>(&NativePtr->ElemCount);
-        public ref Vector4 ClipRect => ref Unsafe.AsRef<Vector4>(&NativePtr->ClipRect);
-        public ref IntPtr TextureId => ref Unsafe.AsRef<IntPtr>(&NativePtr->TextureId);
-        public ref IntPtr UserCallback => ref Unsafe.AsRef<IntPtr>(&NativePtr->UserCallback);
+        public uint* ElemCount => (uint*) &NativePtr->ElemCount;
+        public Vector4* ClipRect => (Vector4*) &NativePtr->ClipRect;
+        public IntPtr* TextureId => (IntPtr*) &NativePtr->TextureId;
+        public IntPtr* UserCallback => (IntPtr*) &NativePtr->UserCallback;
         public IntPtr UserCallbackData { get => (IntPtr)NativePtr->UserCallbackData; set => NativePtr->UserCallbackData = (void*)value; }
     }
 }

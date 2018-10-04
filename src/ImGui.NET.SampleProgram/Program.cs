@@ -27,8 +27,6 @@ namespace ImGuiNET
         private static bool _showMemoryEditor = false;
         private static byte[] _memoryEditorData;
 
-        static void SetThing(out float i, float val) { i = val; }
-
         static void Main(string[] args)
         {
             // Create window, GraphicsDevice, and all resources necessary for the demo.
@@ -120,11 +118,16 @@ namespace ImGuiNET
 
                 ImGui.DragInt("Draggable Int", ref _dragInt);
 
-                float framerate = ImGui.GetIO().Framerate;
+                float framerate;
+                unsafe 
+                {
+                    framerate = *ImGui.GetIO().Framerate;
+                }
+                
                 ImGui.Text($"Application average {1000.0f / framerate:0.##} ms/frame ({framerate:0.#} FPS)");
             }
 
-            DrawTestWindow();
+            // DrawTestWindow();
 
             // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
             if (_showAnotherWindow)
@@ -146,7 +149,11 @@ namespace ImGuiNET
             }
 
             ImGuiIOPtr io = ImGui.GetIO();
-            SetThing(out io.DeltaTime, 2f);
+            //unsafe 
+            //{
+            //    *io.DeltaTime = 2.0f;
+            //}
+            
 
             if (_showMemoryEditor)
             {

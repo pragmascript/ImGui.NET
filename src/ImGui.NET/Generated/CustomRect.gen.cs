@@ -24,13 +24,13 @@ namespace ImGuiNET
         public static implicit operator CustomRectPtr(CustomRect* nativePtr) => new CustomRectPtr(nativePtr);
         public static implicit operator CustomRect* (CustomRectPtr wrappedPtr) => wrappedPtr.NativePtr;
         public static implicit operator CustomRectPtr(IntPtr nativePtr) => new CustomRectPtr(nativePtr);
-        public ref uint ID => ref Unsafe.AsRef<uint>(&NativePtr->ID);
-        public ref ushort Width => ref Unsafe.AsRef<ushort>(&NativePtr->Width);
-        public ref ushort Height => ref Unsafe.AsRef<ushort>(&NativePtr->Height);
-        public ref ushort X => ref Unsafe.AsRef<ushort>(&NativePtr->X);
-        public ref ushort Y => ref Unsafe.AsRef<ushort>(&NativePtr->Y);
-        public ref float GlyphAdvanceX => ref Unsafe.AsRef<float>(&NativePtr->GlyphAdvanceX);
-        public ref Vector2 GlyphOffset => ref Unsafe.AsRef<Vector2>(&NativePtr->GlyphOffset);
+        public uint* ID => (uint*) &NativePtr->ID;
+        public ushort* Width => (ushort*) &NativePtr->Width;
+        public ushort* Height => (ushort*) &NativePtr->Height;
+        public ushort* X => (ushort*) &NativePtr->X;
+        public ushort* Y => (ushort*) &NativePtr->Y;
+        public float* GlyphAdvanceX => (float*) &NativePtr->GlyphAdvanceX;
+        public Vector2* GlyphOffset => (Vector2*) &NativePtr->GlyphOffset;
         public ImFontPtr Font => new ImFontPtr(NativePtr->Font);
         public bool IsPacked()
         {

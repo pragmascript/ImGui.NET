@@ -35,21 +35,21 @@ namespace ImGuiNET
         public static implicit operator ImFontConfig* (ImFontConfigPtr wrappedPtr) => wrappedPtr.NativePtr;
         public static implicit operator ImFontConfigPtr(IntPtr nativePtr) => new ImFontConfigPtr(nativePtr);
         public IntPtr FontData { get => (IntPtr)NativePtr->FontData; set => NativePtr->FontData = (void*)value; }
-        public ref int FontDataSize => ref Unsafe.AsRef<int>(&NativePtr->FontDataSize);
-        public ref Bool8 FontDataOwnedByAtlas => ref Unsafe.AsRef<Bool8>(&NativePtr->FontDataOwnedByAtlas);
-        public ref int FontNo => ref Unsafe.AsRef<int>(&NativePtr->FontNo);
-        public ref float SizePixels => ref Unsafe.AsRef<float>(&NativePtr->SizePixels);
-        public ref int OversampleH => ref Unsafe.AsRef<int>(&NativePtr->OversampleH);
-        public ref int OversampleV => ref Unsafe.AsRef<int>(&NativePtr->OversampleV);
-        public ref Bool8 PixelSnapH => ref Unsafe.AsRef<Bool8>(&NativePtr->PixelSnapH);
-        public ref Vector2 GlyphExtraSpacing => ref Unsafe.AsRef<Vector2>(&NativePtr->GlyphExtraSpacing);
-        public ref Vector2 GlyphOffset => ref Unsafe.AsRef<Vector2>(&NativePtr->GlyphOffset);
+        public int* FontDataSize => (int*) &NativePtr->FontDataSize;
+        public Bool8* FontDataOwnedByAtlas => (Bool8*) &NativePtr->FontDataOwnedByAtlas;
+        public int* FontNo => (int*) &NativePtr->FontNo;
+        public float* SizePixels => (float*) &NativePtr->SizePixels;
+        public int* OversampleH => (int*) &NativePtr->OversampleH;
+        public int* OversampleV => (int*) &NativePtr->OversampleV;
+        public Bool8* PixelSnapH => (Bool8*) &NativePtr->PixelSnapH;
+        public Vector2* GlyphExtraSpacing => (Vector2*) &NativePtr->GlyphExtraSpacing;
+        public Vector2* GlyphOffset => (Vector2*) &NativePtr->GlyphOffset;
         public IntPtr GlyphRanges { get => (IntPtr)NativePtr->GlyphRanges; set => NativePtr->GlyphRanges = (ushort*)value; }
-        public ref float GlyphMinAdvanceX => ref Unsafe.AsRef<float>(&NativePtr->GlyphMinAdvanceX);
-        public ref float GlyphMaxAdvanceX => ref Unsafe.AsRef<float>(&NativePtr->GlyphMaxAdvanceX);
-        public ref Bool8 MergeMode => ref Unsafe.AsRef<Bool8>(&NativePtr->MergeMode);
-        public ref uint RasterizerFlags => ref Unsafe.AsRef<uint>(&NativePtr->RasterizerFlags);
-        public ref float RasterizerMultiply => ref Unsafe.AsRef<float>(&NativePtr->RasterizerMultiply);
+        public float* GlyphMinAdvanceX => (float*) &NativePtr->GlyphMinAdvanceX;
+        public float* GlyphMaxAdvanceX => (float*) &NativePtr->GlyphMaxAdvanceX;
+        public Bool8* MergeMode => (Bool8*) &NativePtr->MergeMode;
+        public uint* RasterizerFlags => (uint*) &NativePtr->RasterizerFlags;
+        public float* RasterizerMultiply => (float*) &NativePtr->RasterizerMultiply;
         public RangeAccessor<byte> Name => new RangeAccessor<byte>(NativePtr->Name, 40);
         public ImFontPtr DstFont => new ImFontPtr(NativePtr->DstFont);
     }

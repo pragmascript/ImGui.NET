@@ -31,17 +31,17 @@ namespace ImGuiNET
         public static implicit operator ImFontAtlasPtr(ImFontAtlas* nativePtr) => new ImFontAtlasPtr(nativePtr);
         public static implicit operator ImFontAtlas* (ImFontAtlasPtr wrappedPtr) => wrappedPtr.NativePtr;
         public static implicit operator ImFontAtlasPtr(IntPtr nativePtr) => new ImFontAtlasPtr(nativePtr);
-        public ref Bool8 Locked => ref Unsafe.AsRef<Bool8>(&NativePtr->Locked);
-        public ref ImFontAtlasFlags Flags => ref Unsafe.AsRef<ImFontAtlasFlags>(&NativePtr->Flags);
-        public ref IntPtr TexID => ref Unsafe.AsRef<IntPtr>(&NativePtr->TexID);
-        public ref int TexDesiredWidth => ref Unsafe.AsRef<int>(&NativePtr->TexDesiredWidth);
-        public ref int TexGlyphPadding => ref Unsafe.AsRef<int>(&NativePtr->TexGlyphPadding);
+        public Bool8* Locked => (Bool8*) &NativePtr->Locked;
+        public ImFontAtlasFlags* Flags => (ImFontAtlasFlags*) &NativePtr->Flags;
+        public IntPtr* TexID => (IntPtr*) &NativePtr->TexID;
+        public int* TexDesiredWidth => (int*) &NativePtr->TexDesiredWidth;
+        public int* TexGlyphPadding => (int*) &NativePtr->TexGlyphPadding;
         public IntPtr TexPixelsAlpha8 { get => (IntPtr)NativePtr->TexPixelsAlpha8; set => NativePtr->TexPixelsAlpha8 = (byte*)value; }
         public IntPtr TexPixelsRGBA32 { get => (IntPtr)NativePtr->TexPixelsRGBA32; set => NativePtr->TexPixelsRGBA32 = (uint*)value; }
-        public ref int TexWidth => ref Unsafe.AsRef<int>(&NativePtr->TexWidth);
-        public ref int TexHeight => ref Unsafe.AsRef<int>(&NativePtr->TexHeight);
-        public ref Vector2 TexUvScale => ref Unsafe.AsRef<Vector2>(&NativePtr->TexUvScale);
-        public ref Vector2 TexUvWhitePixel => ref Unsafe.AsRef<Vector2>(&NativePtr->TexUvWhitePixel);
+        public int* TexWidth => (int*) &NativePtr->TexWidth;
+        public int* TexHeight => (int*) &NativePtr->TexHeight;
+        public Vector2* TexUvScale => (Vector2*) &NativePtr->TexUvScale;
+        public Vector2* TexUvWhitePixel => (Vector2*) &NativePtr->TexUvWhitePixel;
         public ImVector<ImFontPtr> Fonts => new ImVector<ImFontPtr>(NativePtr->Fonts);
         public ImVector<CustomRect> CustomRects => new ImVector<CustomRect>(NativePtr->CustomRects);
         public ImPtrVector<ImFontConfigPtr> ConfigData => new ImPtrVector<ImFontConfigPtr>(NativePtr->ConfigData, Unsafe.SizeOf<ImFontConfig>());

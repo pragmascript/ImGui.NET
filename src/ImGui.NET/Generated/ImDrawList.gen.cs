@@ -34,17 +34,17 @@ namespace ImGuiNET
         public ImPtrVector<ImDrawCmdPtr> CmdBuffer => new ImPtrVector<ImDrawCmdPtr>(NativePtr->CmdBuffer, Unsafe.SizeOf<ImDrawCmd>());
         public ImVector<ushort> IdxBuffer => new ImVector<ushort>(NativePtr->IdxBuffer);
         public ImPtrVector<ImDrawVertPtr> VtxBuffer => new ImPtrVector<ImDrawVertPtr>(NativePtr->VtxBuffer, Unsafe.SizeOf<ImDrawVert>());
-        public ref ImDrawListFlags Flags => ref Unsafe.AsRef<ImDrawListFlags>(&NativePtr->Flags);
-        public ref IntPtr _Data => ref Unsafe.AsRef<IntPtr>(&NativePtr->_Data);
+        public ImDrawListFlags* Flags => (ImDrawListFlags*) &NativePtr->Flags;
+        public IntPtr* _Data => (IntPtr*) &NativePtr->_Data;
         public NullTerminatedString _OwnerName => new NullTerminatedString(NativePtr->_OwnerName);
-        public ref uint _VtxCurrentIdx => ref Unsafe.AsRef<uint>(&NativePtr->_VtxCurrentIdx);
+        public uint* _VtxCurrentIdx => (uint*) &NativePtr->_VtxCurrentIdx;
         public ImDrawVertPtr _VtxWritePtr => new ImDrawVertPtr(NativePtr->_VtxWritePtr);
         public IntPtr _IdxWritePtr { get => (IntPtr)NativePtr->_IdxWritePtr; set => NativePtr->_IdxWritePtr = (ushort*)value; }
         public ImVector<Vector4> _ClipRectStack => new ImVector<Vector4>(NativePtr->_ClipRectStack);
         public ImVector<IntPtr> _TextureIdStack => new ImVector<IntPtr>(NativePtr->_TextureIdStack);
         public ImVector<Vector2> _Path => new ImVector<Vector2>(NativePtr->_Path);
-        public ref int _ChannelsCurrent => ref Unsafe.AsRef<int>(&NativePtr->_ChannelsCurrent);
-        public ref int _ChannelsCount => ref Unsafe.AsRef<int>(&NativePtr->_ChannelsCount);
+        public int* _ChannelsCurrent => (int*) &NativePtr->_ChannelsCurrent;
+        public int* _ChannelsCount => (int*) &NativePtr->_ChannelsCount;
         public ImPtrVector<ImDrawChannelPtr> _Channels => new ImPtrVector<ImDrawChannelPtr>(NativePtr->_Channels, Unsafe.SizeOf<ImDrawChannel>());
         public void ChannelsSetCurrent(int channel_index)
         {

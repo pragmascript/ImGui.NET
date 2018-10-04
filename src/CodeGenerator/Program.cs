@@ -344,7 +344,7 @@ namespace CodeGenerator
                             }
                             else
                             {
-                                writer.WriteLine($"public ref {typeStr} {field.Name} => ref Unsafe.AsRef<{typeStr}>(&NativePtr->{field.Name});");
+                                writer.WriteLine($"public {typeStr}* {field.Name} => ({typeStr}*) &NativePtr->{field.Name};");
                             }
                         }
                     }

@@ -22,12 +22,12 @@ namespace ImGuiNET
         public static implicit operator ImGuiListClipperPtr(ImGuiListClipper* nativePtr) => new ImGuiListClipperPtr(nativePtr);
         public static implicit operator ImGuiListClipper* (ImGuiListClipperPtr wrappedPtr) => wrappedPtr.NativePtr;
         public static implicit operator ImGuiListClipperPtr(IntPtr nativePtr) => new ImGuiListClipperPtr(nativePtr);
-        public ref float StartPosY => ref Unsafe.AsRef<float>(&NativePtr->StartPosY);
-        public ref float ItemsHeight => ref Unsafe.AsRef<float>(&NativePtr->ItemsHeight);
-        public ref int ItemsCount => ref Unsafe.AsRef<int>(&NativePtr->ItemsCount);
-        public ref int StepNo => ref Unsafe.AsRef<int>(&NativePtr->StepNo);
-        public ref int DisplayStart => ref Unsafe.AsRef<int>(&NativePtr->DisplayStart);
-        public ref int DisplayEnd => ref Unsafe.AsRef<int>(&NativePtr->DisplayEnd);
+        public float* StartPosY => (float*) &NativePtr->StartPosY;
+        public float* ItemsHeight => (float*) &NativePtr->ItemsHeight;
+        public int* ItemsCount => (int*) &NativePtr->ItemsCount;
+        public int* StepNo => (int*) &NativePtr->StepNo;
+        public int* DisplayStart => (int*) &NativePtr->DisplayStart;
+        public int* DisplayEnd => (int*) &NativePtr->DisplayEnd;
         public void End()
         {
             ImGuiNative.ImGuiListClipper_End(NativePtr);

@@ -32,22 +32,22 @@ namespace ImGuiNET
         public static implicit operator ImFontPtr(ImFont* nativePtr) => new ImFontPtr(nativePtr);
         public static implicit operator ImFont* (ImFontPtr wrappedPtr) => wrappedPtr.NativePtr;
         public static implicit operator ImFontPtr(IntPtr nativePtr) => new ImFontPtr(nativePtr);
-        public ref float FontSize => ref Unsafe.AsRef<float>(&NativePtr->FontSize);
-        public ref float Scale => ref Unsafe.AsRef<float>(&NativePtr->Scale);
-        public ref Vector2 DisplayOffset => ref Unsafe.AsRef<Vector2>(&NativePtr->DisplayOffset);
+        public float* FontSize => (float*) &NativePtr->FontSize;
+        public float* Scale => (float*) &NativePtr->Scale;
+        public Vector2* DisplayOffset => (Vector2*) &NativePtr->DisplayOffset;
         public ImPtrVector<ImFontGlyphPtr> Glyphs => new ImPtrVector<ImFontGlyphPtr>(NativePtr->Glyphs, Unsafe.SizeOf<ImFontGlyph>());
         public ImVector<float> IndexAdvanceX => new ImVector<float>(NativePtr->IndexAdvanceX);
         public ImVector<ushort> IndexLookup => new ImVector<ushort>(NativePtr->IndexLookup);
         public ImFontGlyphPtr FallbackGlyph => new ImFontGlyphPtr(NativePtr->FallbackGlyph);
-        public ref float FallbackAdvanceX => ref Unsafe.AsRef<float>(&NativePtr->FallbackAdvanceX);
-        public ref ushort FallbackChar => ref Unsafe.AsRef<ushort>(&NativePtr->FallbackChar);
-        public ref short ConfigDataCount => ref Unsafe.AsRef<short>(&NativePtr->ConfigDataCount);
+        public float* FallbackAdvanceX => (float*) &NativePtr->FallbackAdvanceX;
+        public ushort* FallbackChar => (ushort*) &NativePtr->FallbackChar;
+        public short* ConfigDataCount => (short*) &NativePtr->ConfigDataCount;
         public ImFontConfigPtr ConfigData => new ImFontConfigPtr(NativePtr->ConfigData);
         public ImFontAtlasPtr ContainerAtlas => new ImFontAtlasPtr(NativePtr->ContainerAtlas);
-        public ref float Ascent => ref Unsafe.AsRef<float>(&NativePtr->Ascent);
-        public ref float Descent => ref Unsafe.AsRef<float>(&NativePtr->Descent);
-        public ref Bool8 DirtyLookupTables => ref Unsafe.AsRef<Bool8>(&NativePtr->DirtyLookupTables);
-        public ref int MetricsTotalSurface => ref Unsafe.AsRef<int>(&NativePtr->MetricsTotalSurface);
+        public float* Ascent => (float*) &NativePtr->Ascent;
+        public float* Descent => (float*) &NativePtr->Descent;
+        public Bool8* DirtyLookupTables => (Bool8*) &NativePtr->DirtyLookupTables;
+        public int* MetricsTotalSurface => (int*) &NativePtr->MetricsTotalSurface;
         public void AddRemapChar(ushort dst, ushort src)
         {
             byte overwrite_dst = 1;
