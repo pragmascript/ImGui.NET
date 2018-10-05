@@ -33,7 +33,7 @@ namespace ImGuiNET
             VeldridStartup.CreateWindowAndGraphicsDevice(
                 new WindowCreateInfo(50, 50, 1280, 720, WindowState.Normal, "ImGui.NET Sample Program"),
                 new GraphicsDeviceOptions(true, null, true),
-                GraphicsBackend.Vulkan,
+                GraphicsBackend.OpenGL,
                 out _window,
                 out _gd);
             _window.Resized += () =>
@@ -99,6 +99,8 @@ namespace ImGuiNET
             // Demo code adapted from the official Dear ImGui demo program:
             // https://github.com/ocornut/imgui/blob/master/examples/example_win32_directx11/main.cpp#L172
 
+
+
             // 1. Show a simple window.
             // Tip: if we don't call ImGui.BeginWindow()/ImGui.EndWindow() the widgets automatically appears in a window called "Debug".
             {
@@ -127,7 +129,7 @@ namespace ImGuiNET
                 ImGui.Text($"Application average {1000.0f / framerate:0.##} ms/frame ({framerate:0.#} FPS)");
             }
 
-            // DrawTestWindow();
+            DrawTestWindow();
 
             // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
             if (_showAnotherWindow)
@@ -149,11 +151,10 @@ namespace ImGuiNET
             }
 
             ImGuiIOPtr io = ImGui.GetIO();
-            //unsafe 
-            //{
-            //    *io.DeltaTime = 2.0f;
-            //}
-            
+            unsafe {
+                *io.DeltaTime = 2.0f;
+            }
+
 
             if (_showMemoryEditor)
             {
