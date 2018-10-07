@@ -18,7 +18,7 @@ namespace ImGuiNET
             Count = count;
         }
 
-        public ref T this[int index]
+        public T this[int index]
         {
             get
             {
@@ -27,7 +27,14 @@ namespace ImGuiNET
                     throw new IndexOutOfRangeException();
                 }
 
-                return ref Unsafe.AsRef<T>((byte*)Data + s_sizeOfT * index);
+                return Unsafe.Read<T>((byte*)Data + s_sizeOfT * index);
+            }
+            set 
+            {
+                if (index < 0 || index >= Count) {
+                    throw new IndexOutOfRangeException();
+                }
+                Unsafe.Write<T>((byte*)Data + s_sizeOfT * index, value);
             }
         }
     }
