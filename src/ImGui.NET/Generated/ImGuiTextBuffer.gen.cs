@@ -12,11 +12,11 @@ namespace ImGuiNET
     public unsafe partial struct ImGuiTextBufferPtr
     {
         public ImGuiTextBuffer* NativePtr { get; }
-        public ImGuiTextBufferPtr(ImGuiTextBuffer* nativePtr) => NativePtr = nativePtr;
-        public ImGuiTextBufferPtr(IntPtr nativePtr) => NativePtr = (ImGuiTextBuffer*)nativePtr;
-        public static implicit operator ImGuiTextBufferPtr(ImGuiTextBuffer* nativePtr) => new ImGuiTextBufferPtr(nativePtr);
-        public static implicit operator ImGuiTextBuffer* (ImGuiTextBufferPtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator ImGuiTextBufferPtr(IntPtr nativePtr) => new ImGuiTextBufferPtr(nativePtr);
+        public ImGuiTextBufferPtr(ImGuiTextBuffer* nativePtr) { NativePtr = nativePtr; }
+        public ImGuiTextBufferPtr(IntPtr nativePtr) { NativePtr = (ImGuiTextBuffer*)nativePtr; }
+        public static implicit operator ImGuiTextBufferPtr(ImGuiTextBuffer* nativePtr) { return new ImGuiTextBufferPtr(nativePtr); }
+        public static implicit operator ImGuiTextBuffer* (ImGuiTextBufferPtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator ImGuiTextBufferPtr(IntPtr nativePtr) { return new ImGuiTextBufferPtr(nativePtr); }
         public ImVector<byte> Buf => new ImVector<byte>(NativePtr->Buf);
         public void clear()
         {

@@ -29,27 +29,27 @@ namespace ImGuiNET
     public unsafe partial struct ImFontConfigPtr
     {
         public ImFontConfig* NativePtr { get; }
-        public ImFontConfigPtr(ImFontConfig* nativePtr) => NativePtr = nativePtr;
-        public ImFontConfigPtr(IntPtr nativePtr) => NativePtr = (ImFontConfig*)nativePtr;
-        public static implicit operator ImFontConfigPtr(ImFontConfig* nativePtr) => new ImFontConfigPtr(nativePtr);
-        public static implicit operator ImFontConfig* (ImFontConfigPtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator ImFontConfigPtr(IntPtr nativePtr) => new ImFontConfigPtr(nativePtr);
-        public IntPtr FontData { get => (IntPtr)NativePtr->FontData; set => NativePtr->FontData = (void*)value; }
-        public int* FontDataSize => (int*) &NativePtr->FontDataSize;
-        public Bool8* FontDataOwnedByAtlas => (Bool8*) &NativePtr->FontDataOwnedByAtlas;
-        public int* FontNo => (int*) &NativePtr->FontNo;
-        public float* SizePixels => (float*) &NativePtr->SizePixels;
-        public int* OversampleH => (int*) &NativePtr->OversampleH;
-        public int* OversampleV => (int*) &NativePtr->OversampleV;
-        public Bool8* PixelSnapH => (Bool8*) &NativePtr->PixelSnapH;
-        public Vector2* GlyphExtraSpacing => (Vector2*) &NativePtr->GlyphExtraSpacing;
-        public Vector2* GlyphOffset => (Vector2*) &NativePtr->GlyphOffset;
-        public IntPtr GlyphRanges { get => (IntPtr)NativePtr->GlyphRanges; set => NativePtr->GlyphRanges = (ushort*)value; }
-        public float* GlyphMinAdvanceX => (float*) &NativePtr->GlyphMinAdvanceX;
-        public float* GlyphMaxAdvanceX => (float*) &NativePtr->GlyphMaxAdvanceX;
-        public Bool8* MergeMode => (Bool8*) &NativePtr->MergeMode;
-        public uint* RasterizerFlags => (uint*) &NativePtr->RasterizerFlags;
-        public float* RasterizerMultiply => (float*) &NativePtr->RasterizerMultiply;
+        public ImFontConfigPtr(ImFontConfig* nativePtr) { NativePtr = nativePtr; }
+        public ImFontConfigPtr(IntPtr nativePtr) { NativePtr = (ImFontConfig*)nativePtr; }
+        public static implicit operator ImFontConfigPtr(ImFontConfig* nativePtr) { return new ImFontConfigPtr(nativePtr); }
+        public static implicit operator ImFontConfig* (ImFontConfigPtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator ImFontConfigPtr(IntPtr nativePtr) { return new ImFontConfigPtr(nativePtr); }
+        public IntPtr FontData { get { return (IntPtr)NativePtr->FontData; } set { NativePtr->FontData = (void*)value; } }
+        public int* FontDataSize { get { return (int*) &NativePtr->FontDataSize; } }
+        public Bool8* FontDataOwnedByAtlas { get { return (Bool8*) &NativePtr->FontDataOwnedByAtlas; } }
+        public int* FontNo { get { return (int*) &NativePtr->FontNo; } }
+        public float* SizePixels { get { return (float*) &NativePtr->SizePixels; } }
+        public int* OversampleH { get { return (int*) &NativePtr->OversampleH; } }
+        public int* OversampleV { get { return (int*) &NativePtr->OversampleV; } }
+        public Bool8* PixelSnapH { get { return (Bool8*) &NativePtr->PixelSnapH; } }
+        public Vector2* GlyphExtraSpacing { get { return (Vector2*) &NativePtr->GlyphExtraSpacing; } }
+        public Vector2* GlyphOffset { get { return (Vector2*) &NativePtr->GlyphOffset; } }
+        public IntPtr GlyphRanges { get { return (IntPtr)NativePtr->GlyphRanges; } set { NativePtr->GlyphRanges = (ushort*)value; } }
+        public float* GlyphMinAdvanceX { get { return (float*) &NativePtr->GlyphMinAdvanceX; } }
+        public float* GlyphMaxAdvanceX { get { return (float*) &NativePtr->GlyphMaxAdvanceX; } }
+        public Bool8* MergeMode { get { return (Bool8*) &NativePtr->MergeMode; } }
+        public uint* RasterizerFlags { get { return (uint*) &NativePtr->RasterizerFlags; } }
+        public float* RasterizerMultiply { get { return (float*) &NativePtr->RasterizerMultiply; } }
         public RangeAccessor<byte> Name => new RangeAccessor<byte>(NativePtr->Name, 40);
         public ImFontPtr DstFont => new ImFontPtr(NativePtr->DstFont);
     }

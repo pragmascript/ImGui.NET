@@ -12,11 +12,11 @@ namespace ImGuiNET
     public unsafe partial struct ImGuiStoragePtr
     {
         public ImGuiStorage* NativePtr { get; }
-        public ImGuiStoragePtr(ImGuiStorage* nativePtr) => NativePtr = nativePtr;
-        public ImGuiStoragePtr(IntPtr nativePtr) => NativePtr = (ImGuiStorage*)nativePtr;
-        public static implicit operator ImGuiStoragePtr(ImGuiStorage* nativePtr) => new ImGuiStoragePtr(nativePtr);
-        public static implicit operator ImGuiStorage* (ImGuiStoragePtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator ImGuiStoragePtr(IntPtr nativePtr) => new ImGuiStoragePtr(nativePtr);
+        public ImGuiStoragePtr(ImGuiStorage* nativePtr) { NativePtr = nativePtr; }
+        public ImGuiStoragePtr(IntPtr nativePtr) { NativePtr = (ImGuiStorage*)nativePtr; }
+        public static implicit operator ImGuiStoragePtr(ImGuiStorage* nativePtr) { return new ImGuiStoragePtr(nativePtr); }
+        public static implicit operator ImGuiStorage* (ImGuiStoragePtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator ImGuiStoragePtr(IntPtr nativePtr) { return new ImGuiStoragePtr(nativePtr); }
         public ImVector<Pair> Data => new ImVector<Pair>(NativePtr->Data);
         public void SetFloat(uint key, float val)
         {

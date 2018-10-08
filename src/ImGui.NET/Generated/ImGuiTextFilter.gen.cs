@@ -14,14 +14,14 @@ namespace ImGuiNET
     public unsafe partial struct ImGuiTextFilterPtr
     {
         public ImGuiTextFilter* NativePtr { get; }
-        public ImGuiTextFilterPtr(ImGuiTextFilter* nativePtr) => NativePtr = nativePtr;
-        public ImGuiTextFilterPtr(IntPtr nativePtr) => NativePtr = (ImGuiTextFilter*)nativePtr;
-        public static implicit operator ImGuiTextFilterPtr(ImGuiTextFilter* nativePtr) => new ImGuiTextFilterPtr(nativePtr);
-        public static implicit operator ImGuiTextFilter* (ImGuiTextFilterPtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator ImGuiTextFilterPtr(IntPtr nativePtr) => new ImGuiTextFilterPtr(nativePtr);
+        public ImGuiTextFilterPtr(ImGuiTextFilter* nativePtr) { NativePtr = nativePtr; }
+        public ImGuiTextFilterPtr(IntPtr nativePtr) { NativePtr = (ImGuiTextFilter*)nativePtr; }
+        public static implicit operator ImGuiTextFilterPtr(ImGuiTextFilter* nativePtr) { return new ImGuiTextFilterPtr(nativePtr); }
+        public static implicit operator ImGuiTextFilter* (ImGuiTextFilterPtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator ImGuiTextFilterPtr(IntPtr nativePtr) { return new ImGuiTextFilterPtr(nativePtr); }
         public RangeAccessor<byte> InputBuf => new RangeAccessor<byte>(NativePtr->InputBuf, 256);
         public ImVector<TextRange> Filters => new ImVector<TextRange>(NativePtr->Filters);
-        public int* CountGrep => (int*) &NativePtr->CountGrep;
+        public int* CountGrep { get { return (int*) &NativePtr->CountGrep; } }
         public void Build()
         {
             ImGuiNative.ImGuiTextFilter_Build(NativePtr);

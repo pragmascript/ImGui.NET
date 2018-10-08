@@ -23,23 +23,23 @@ namespace ImGuiNET
     public unsafe partial struct ImGuiInputTextCallbackDataPtr
     {
         public ImGuiInputTextCallbackData* NativePtr { get; }
-        public ImGuiInputTextCallbackDataPtr(ImGuiInputTextCallbackData* nativePtr) => NativePtr = nativePtr;
-        public ImGuiInputTextCallbackDataPtr(IntPtr nativePtr) => NativePtr = (ImGuiInputTextCallbackData*)nativePtr;
-        public static implicit operator ImGuiInputTextCallbackDataPtr(ImGuiInputTextCallbackData* nativePtr) => new ImGuiInputTextCallbackDataPtr(nativePtr);
-        public static implicit operator ImGuiInputTextCallbackData* (ImGuiInputTextCallbackDataPtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator ImGuiInputTextCallbackDataPtr(IntPtr nativePtr) => new ImGuiInputTextCallbackDataPtr(nativePtr);
-        public ImGuiInputTextFlags* EventFlag => (ImGuiInputTextFlags*) &NativePtr->EventFlag;
-        public ImGuiInputTextFlags* Flags => (ImGuiInputTextFlags*) &NativePtr->Flags;
-        public IntPtr UserData { get => (IntPtr)NativePtr->UserData; set => NativePtr->UserData = (void*)value; }
-        public ushort* EventChar => (ushort*) &NativePtr->EventChar;
-        public ImGuiKey* EventKey => (ImGuiKey*) &NativePtr->EventKey;
-        public IntPtr Buf { get => (IntPtr)NativePtr->Buf; set => NativePtr->Buf = (byte*)value; }
-        public int* BufTextLen => (int*) &NativePtr->BufTextLen;
-        public int* BufSize => (int*) &NativePtr->BufSize;
-        public Bool8* BufDirty => (Bool8*) &NativePtr->BufDirty;
-        public int* CursorPos => (int*) &NativePtr->CursorPos;
-        public int* SelectionStart => (int*) &NativePtr->SelectionStart;
-        public int* SelectionEnd => (int*) &NativePtr->SelectionEnd;
+        public ImGuiInputTextCallbackDataPtr(ImGuiInputTextCallbackData* nativePtr) { NativePtr = nativePtr; }
+        public ImGuiInputTextCallbackDataPtr(IntPtr nativePtr) { NativePtr = (ImGuiInputTextCallbackData*)nativePtr; }
+        public static implicit operator ImGuiInputTextCallbackDataPtr(ImGuiInputTextCallbackData* nativePtr) { return new ImGuiInputTextCallbackDataPtr(nativePtr); }
+        public static implicit operator ImGuiInputTextCallbackData* (ImGuiInputTextCallbackDataPtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator ImGuiInputTextCallbackDataPtr(IntPtr nativePtr) { return new ImGuiInputTextCallbackDataPtr(nativePtr); }
+        public ImGuiInputTextFlags* EventFlag { get { return (ImGuiInputTextFlags*) &NativePtr->EventFlag; } }
+        public ImGuiInputTextFlags* Flags { get { return (ImGuiInputTextFlags*) &NativePtr->Flags; } }
+        public IntPtr UserData { get { return (IntPtr)NativePtr->UserData; } set { NativePtr->UserData = (void*)value; } }
+        public ushort* EventChar { get { return (ushort*) &NativePtr->EventChar; } }
+        public ImGuiKey* EventKey { get { return (ImGuiKey*) &NativePtr->EventKey; } }
+        public IntPtr Buf { get { return (IntPtr)NativePtr->Buf; } set { NativePtr->Buf = (byte*)value; } }
+        public int* BufTextLen { get { return (int*) &NativePtr->BufTextLen; } }
+        public int* BufSize { get { return (int*) &NativePtr->BufSize; } }
+        public Bool8* BufDirty { get { return (Bool8*) &NativePtr->BufDirty; } }
+        public int* CursorPos { get { return (int*) &NativePtr->CursorPos; } }
+        public int* SelectionStart { get { return (int*) &NativePtr->SelectionStart; } }
+        public int* SelectionEnd { get { return (int*) &NativePtr->SelectionEnd; } }
         public void DeleteChars(int pos, int bytes_count)
         {
             ImGuiNative.ImGuiInputTextCallbackData_DeleteChars(NativePtr, pos, bytes_count);

@@ -13,13 +13,13 @@ namespace ImGuiNET
     public unsafe partial struct TextRangePtr
     {
         public TextRange* NativePtr { get; }
-        public TextRangePtr(TextRange* nativePtr) => NativePtr = nativePtr;
-        public TextRangePtr(IntPtr nativePtr) => NativePtr = (TextRange*)nativePtr;
-        public static implicit operator TextRangePtr(TextRange* nativePtr) => new TextRangePtr(nativePtr);
-        public static implicit operator TextRange* (TextRangePtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator TextRangePtr(IntPtr nativePtr) => new TextRangePtr(nativePtr);
-        public IntPtr b { get => (IntPtr)NativePtr->b; set => NativePtr->b = (byte*)value; }
-        public IntPtr e { get => (IntPtr)NativePtr->e; set => NativePtr->e = (byte*)value; }
+        public TextRangePtr(TextRange* nativePtr) { NativePtr = nativePtr; }
+        public TextRangePtr(IntPtr nativePtr) { NativePtr = (TextRange*)nativePtr; }
+        public static implicit operator TextRangePtr(TextRange* nativePtr) { return new TextRangePtr(nativePtr); }
+        public static implicit operator TextRange* (TextRangePtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator TextRangePtr(IntPtr nativePtr) { return new TextRangePtr(nativePtr); }
+        public IntPtr b { get { return (IntPtr)NativePtr->b; } set { NativePtr->b = (byte*)value; } }
+        public IntPtr e { get { return (IntPtr)NativePtr->e; } set { NativePtr->e = (byte*)value; } }
         public void split(byte separator, ref ImVector @out)
         {
             ImVector native_out_val = @out;

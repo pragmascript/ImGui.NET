@@ -19,19 +19,19 @@ namespace ImGuiNET
     public unsafe partial struct ImGuiPayloadPtr
     {
         public ImGuiPayload* NativePtr { get; }
-        public ImGuiPayloadPtr(ImGuiPayload* nativePtr) => NativePtr = nativePtr;
-        public ImGuiPayloadPtr(IntPtr nativePtr) => NativePtr = (ImGuiPayload*)nativePtr;
-        public static implicit operator ImGuiPayloadPtr(ImGuiPayload* nativePtr) => new ImGuiPayloadPtr(nativePtr);
-        public static implicit operator ImGuiPayload* (ImGuiPayloadPtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator ImGuiPayloadPtr(IntPtr nativePtr) => new ImGuiPayloadPtr(nativePtr);
-        public IntPtr Data { get => (IntPtr)NativePtr->Data; set => NativePtr->Data = (void*)value; }
-        public int* DataSize => (int*) &NativePtr->DataSize;
-        public uint* SourceId => (uint*) &NativePtr->SourceId;
-        public uint* SourceParentId => (uint*) &NativePtr->SourceParentId;
-        public int* DataFrameCount => (int*) &NativePtr->DataFrameCount;
+        public ImGuiPayloadPtr(ImGuiPayload* nativePtr) { NativePtr = nativePtr; }
+        public ImGuiPayloadPtr(IntPtr nativePtr) { NativePtr = (ImGuiPayload*)nativePtr; }
+        public static implicit operator ImGuiPayloadPtr(ImGuiPayload* nativePtr) { return new ImGuiPayloadPtr(nativePtr); }
+        public static implicit operator ImGuiPayload* (ImGuiPayloadPtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator ImGuiPayloadPtr(IntPtr nativePtr) { return new ImGuiPayloadPtr(nativePtr); }
+        public IntPtr Data { get { return (IntPtr)NativePtr->Data; } set { NativePtr->Data = (void*)value; } }
+        public int* DataSize { get { return (int*) &NativePtr->DataSize; } }
+        public uint* SourceId { get { return (uint*) &NativePtr->SourceId; } }
+        public uint* SourceParentId { get { return (uint*) &NativePtr->SourceParentId; } }
+        public int* DataFrameCount { get { return (int*) &NativePtr->DataFrameCount; } }
         public RangeAccessor<byte> DataType => new RangeAccessor<byte>(NativePtr->DataType, 33);
-        public Bool8* Preview => (Bool8*) &NativePtr->Preview;
-        public Bool8* Delivery => (Bool8*) &NativePtr->Delivery;
+        public Bool8* Preview { get { return (Bool8*) &NativePtr->Preview; } }
+        public Bool8* Delivery { get { return (Bool8*) &NativePtr->Delivery; } }
         public void Clear()
         {
             ImGuiNative.ImGuiPayload_Clear(NativePtr);

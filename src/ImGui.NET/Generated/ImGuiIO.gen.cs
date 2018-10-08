@@ -90,68 +90,68 @@ namespace ImGuiNET
     public unsafe partial struct ImGuiIOPtr
     {
         public ImGuiIO* NativePtr { get; }
-        public ImGuiIOPtr(ImGuiIO* nativePtr) => NativePtr = nativePtr;
-        public ImGuiIOPtr(IntPtr nativePtr) => NativePtr = (ImGuiIO*)nativePtr;
-        public static implicit operator ImGuiIOPtr(ImGuiIO* nativePtr) => new ImGuiIOPtr(nativePtr);
-        public static implicit operator ImGuiIO* (ImGuiIOPtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator ImGuiIOPtr(IntPtr nativePtr) => new ImGuiIOPtr(nativePtr);
-        public ImGuiConfigFlags* ConfigFlags => (ImGuiConfigFlags*) &NativePtr->ConfigFlags;
-        public ImGuiBackendFlags* BackendFlags => (ImGuiBackendFlags*) &NativePtr->BackendFlags;
-        public Vector2* DisplaySize => (Vector2*) &NativePtr->DisplaySize;
-        public float* DeltaTime => (float*) &NativePtr->DeltaTime;
-        public float* IniSavingRate => (float*) &NativePtr->IniSavingRate;
+        public ImGuiIOPtr(ImGuiIO* nativePtr) { NativePtr = nativePtr; }
+        public ImGuiIOPtr(IntPtr nativePtr) { NativePtr = (ImGuiIO*)nativePtr; }
+        public static implicit operator ImGuiIOPtr(ImGuiIO* nativePtr) { return new ImGuiIOPtr(nativePtr); }
+        public static implicit operator ImGuiIO* (ImGuiIOPtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator ImGuiIOPtr(IntPtr nativePtr) { return new ImGuiIOPtr(nativePtr); }
+        public ImGuiConfigFlags* ConfigFlags { get { return (ImGuiConfigFlags*) &NativePtr->ConfigFlags; } }
+        public ImGuiBackendFlags* BackendFlags { get { return (ImGuiBackendFlags*) &NativePtr->BackendFlags; } }
+        public Vector2* DisplaySize { get { return (Vector2*) &NativePtr->DisplaySize; } }
+        public float* DeltaTime { get { return (float*) &NativePtr->DeltaTime; } }
+        public float* IniSavingRate { get { return (float*) &NativePtr->IniSavingRate; } }
         public NullTerminatedString IniFilename => new NullTerminatedString(NativePtr->IniFilename);
         public NullTerminatedString LogFilename => new NullTerminatedString(NativePtr->LogFilename);
-        public float* MouseDoubleClickTime => (float*) &NativePtr->MouseDoubleClickTime;
-        public float* MouseDoubleClickMaxDist => (float*) &NativePtr->MouseDoubleClickMaxDist;
-        public float* MouseDragThreshold => (float*) &NativePtr->MouseDragThreshold;
+        public float* MouseDoubleClickTime { get { return (float*) &NativePtr->MouseDoubleClickTime; } }
+        public float* MouseDoubleClickMaxDist { get { return (float*) &NativePtr->MouseDoubleClickMaxDist; } }
+        public float* MouseDragThreshold { get { return (float*) &NativePtr->MouseDragThreshold; } }
         public RangeAccessor<int> KeyMap => new RangeAccessor<int>(NativePtr->KeyMap, 21);
-        public float* KeyRepeatDelay => (float*) &NativePtr->KeyRepeatDelay;
-        public float* KeyRepeatRate => (float*) &NativePtr->KeyRepeatRate;
-        public IntPtr UserData { get => (IntPtr)NativePtr->UserData; set => NativePtr->UserData = (void*)value; }
+        public float* KeyRepeatDelay { get { return (float*) &NativePtr->KeyRepeatDelay; } }
+        public float* KeyRepeatRate { get { return (float*) &NativePtr->KeyRepeatRate; } }
+        public IntPtr UserData { get { return (IntPtr)NativePtr->UserData; } set { NativePtr->UserData = (void*)value; } }
         public ImFontAtlasPtr Fonts => new ImFontAtlasPtr(NativePtr->Fonts);
-        public float* FontGlobalScale => (float*) &NativePtr->FontGlobalScale;
-        public Bool8* FontAllowUserScaling => (Bool8*) &NativePtr->FontAllowUserScaling;
+        public float* FontGlobalScale { get { return (float*) &NativePtr->FontGlobalScale; } }
+        public Bool8* FontAllowUserScaling { get { return (Bool8*) &NativePtr->FontAllowUserScaling; } }
         public ImFontPtr FontDefault => new ImFontPtr(NativePtr->FontDefault);
-        public Vector2* DisplayFramebufferScale => (Vector2*) &NativePtr->DisplayFramebufferScale;
-        public Vector2* DisplayVisibleMin => (Vector2*) &NativePtr->DisplayVisibleMin;
-        public Vector2* DisplayVisibleMax => (Vector2*) &NativePtr->DisplayVisibleMax;
-        public Bool8* MouseDrawCursor => (Bool8*) &NativePtr->MouseDrawCursor;
-        public Bool8* ConfigMacOSXBehaviors => (Bool8*) &NativePtr->ConfigMacOSXBehaviors;
-        public Bool8* ConfigInputTextCursorBlink => (Bool8*) &NativePtr->ConfigInputTextCursorBlink;
-        public Bool8* ConfigResizeWindowsFromEdges => (Bool8*) &NativePtr->ConfigResizeWindowsFromEdges;
-        public IntPtr* GetClipboardTextFn => (IntPtr*) &NativePtr->GetClipboardTextFn;
-        public IntPtr* SetClipboardTextFn => (IntPtr*) &NativePtr->SetClipboardTextFn;
-        public IntPtr ClipboardUserData { get => (IntPtr)NativePtr->ClipboardUserData; set => NativePtr->ClipboardUserData = (void*)value; }
-        public IntPtr* ImeSetInputScreenPosFn => (IntPtr*) &NativePtr->ImeSetInputScreenPosFn;
-        public IntPtr ImeWindowHandle { get => (IntPtr)NativePtr->ImeWindowHandle; set => NativePtr->ImeWindowHandle = (void*)value; }
-        public IntPtr RenderDrawListsFnUnused { get => (IntPtr)NativePtr->RenderDrawListsFnUnused; set => NativePtr->RenderDrawListsFnUnused = (void*)value; }
-        public Vector2* MousePos => (Vector2*) &NativePtr->MousePos;
+        public Vector2* DisplayFramebufferScale { get { return (Vector2*) &NativePtr->DisplayFramebufferScale; } }
+        public Vector2* DisplayVisibleMin { get { return (Vector2*) &NativePtr->DisplayVisibleMin; } }
+        public Vector2* DisplayVisibleMax { get { return (Vector2*) &NativePtr->DisplayVisibleMax; } }
+        public Bool8* MouseDrawCursor { get { return (Bool8*) &NativePtr->MouseDrawCursor; } }
+        public Bool8* ConfigMacOSXBehaviors { get { return (Bool8*) &NativePtr->ConfigMacOSXBehaviors; } }
+        public Bool8* ConfigInputTextCursorBlink { get { return (Bool8*) &NativePtr->ConfigInputTextCursorBlink; } }
+        public Bool8* ConfigResizeWindowsFromEdges { get { return (Bool8*) &NativePtr->ConfigResizeWindowsFromEdges; } }
+        public IntPtr* GetClipboardTextFn { get { return (IntPtr*) &NativePtr->GetClipboardTextFn; } }
+        public IntPtr* SetClipboardTextFn { get { return (IntPtr*) &NativePtr->SetClipboardTextFn; } }
+        public IntPtr ClipboardUserData { get { return (IntPtr)NativePtr->ClipboardUserData; } set { NativePtr->ClipboardUserData = (void*)value; } }
+        public IntPtr* ImeSetInputScreenPosFn { get { return (IntPtr*) &NativePtr->ImeSetInputScreenPosFn; } }
+        public IntPtr ImeWindowHandle { get { return (IntPtr)NativePtr->ImeWindowHandle; } set { NativePtr->ImeWindowHandle = (void*)value; } }
+        public IntPtr RenderDrawListsFnUnused { get { return (IntPtr)NativePtr->RenderDrawListsFnUnused; } set { NativePtr->RenderDrawListsFnUnused = (void*)value; } }
+        public Vector2* MousePos { get { return (Vector2*) &NativePtr->MousePos; } }
         public RangeAccessor<Bool8> MouseDown => new RangeAccessor<Bool8>(NativePtr->MouseDown, 5);
-        public float* MouseWheel => (float*) &NativePtr->MouseWheel;
-        public float* MouseWheelH => (float*) &NativePtr->MouseWheelH;
-        public Bool8* KeyCtrl => (Bool8*) &NativePtr->KeyCtrl;
-        public Bool8* KeyShift => (Bool8*) &NativePtr->KeyShift;
-        public Bool8* KeyAlt => (Bool8*) &NativePtr->KeyAlt;
-        public Bool8* KeySuper => (Bool8*) &NativePtr->KeySuper;
+        public float* MouseWheel { get { return (float*) &NativePtr->MouseWheel; } }
+        public float* MouseWheelH { get { return (float*) &NativePtr->MouseWheelH; } }
+        public Bool8* KeyCtrl { get { return (Bool8*) &NativePtr->KeyCtrl; } }
+        public Bool8* KeyShift { get { return (Bool8*) &NativePtr->KeyShift; } }
+        public Bool8* KeyAlt { get { return (Bool8*) &NativePtr->KeyAlt; } }
+        public Bool8* KeySuper { get { return (Bool8*) &NativePtr->KeySuper; } }
         public RangeAccessor<Bool8> KeysDown => new RangeAccessor<Bool8>(NativePtr->KeysDown, 512);
         public RangeAccessor<ushort> InputCharacters => new RangeAccessor<ushort>(NativePtr->InputCharacters, 17);
         public RangeAccessor<float> NavInputs => new RangeAccessor<float>(NativePtr->NavInputs, 21);
-        public Bool8* WantCaptureMouse => (Bool8*) &NativePtr->WantCaptureMouse;
-        public Bool8* WantCaptureKeyboard => (Bool8*) &NativePtr->WantCaptureKeyboard;
-        public Bool8* WantTextInput => (Bool8*) &NativePtr->WantTextInput;
-        public Bool8* WantSetMousePos => (Bool8*) &NativePtr->WantSetMousePos;
-        public Bool8* WantSaveIniSettings => (Bool8*) &NativePtr->WantSaveIniSettings;
-        public Bool8* NavActive => (Bool8*) &NativePtr->NavActive;
-        public Bool8* NavVisible => (Bool8*) &NativePtr->NavVisible;
-        public float* Framerate => (float*) &NativePtr->Framerate;
-        public int* MetricsRenderVertices => (int*) &NativePtr->MetricsRenderVertices;
-        public int* MetricsRenderIndices => (int*) &NativePtr->MetricsRenderIndices;
-        public int* MetricsRenderWindows => (int*) &NativePtr->MetricsRenderWindows;
-        public int* MetricsActiveWindows => (int*) &NativePtr->MetricsActiveWindows;
-        public int* MetricsActiveAllocations => (int*) &NativePtr->MetricsActiveAllocations;
-        public Vector2* MouseDelta => (Vector2*) &NativePtr->MouseDelta;
-        public Vector2* MousePosPrev => (Vector2*) &NativePtr->MousePosPrev;
+        public Bool8* WantCaptureMouse { get { return (Bool8*) &NativePtr->WantCaptureMouse; } }
+        public Bool8* WantCaptureKeyboard { get { return (Bool8*) &NativePtr->WantCaptureKeyboard; } }
+        public Bool8* WantTextInput { get { return (Bool8*) &NativePtr->WantTextInput; } }
+        public Bool8* WantSetMousePos { get { return (Bool8*) &NativePtr->WantSetMousePos; } }
+        public Bool8* WantSaveIniSettings { get { return (Bool8*) &NativePtr->WantSaveIniSettings; } }
+        public Bool8* NavActive { get { return (Bool8*) &NativePtr->NavActive; } }
+        public Bool8* NavVisible { get { return (Bool8*) &NativePtr->NavVisible; } }
+        public float* Framerate { get { return (float*) &NativePtr->Framerate; } }
+        public int* MetricsRenderVertices { get { return (int*) &NativePtr->MetricsRenderVertices; } }
+        public int* MetricsRenderIndices { get { return (int*) &NativePtr->MetricsRenderIndices; } }
+        public int* MetricsRenderWindows { get { return (int*) &NativePtr->MetricsRenderWindows; } }
+        public int* MetricsActiveWindows { get { return (int*) &NativePtr->MetricsActiveWindows; } }
+        public int* MetricsActiveAllocations { get { return (int*) &NativePtr->MetricsActiveAllocations; } }
+        public Vector2* MouseDelta { get { return (Vector2*) &NativePtr->MouseDelta; } }
+        public Vector2* MousePosPrev { get { return (Vector2*) &NativePtr->MousePosPrev; } }
         public RangeAccessor<Vector2> MouseClickedPos => new RangeAccessor<Vector2>(&NativePtr->MouseClickedPos_0, 5);
         public RangeAccessor<double> MouseClickedTime => new RangeAccessor<double>(NativePtr->MouseClickedTime, 5);
         public RangeAccessor<Bool8> MouseClicked => new RangeAccessor<Bool8>(NativePtr->MouseClicked, 5);

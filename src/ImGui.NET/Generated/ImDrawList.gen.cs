@@ -26,25 +26,25 @@ namespace ImGuiNET
     public unsafe partial struct ImDrawListPtr
     {
         public ImDrawList* NativePtr { get; }
-        public ImDrawListPtr(ImDrawList* nativePtr) => NativePtr = nativePtr;
-        public ImDrawListPtr(IntPtr nativePtr) => NativePtr = (ImDrawList*)nativePtr;
-        public static implicit operator ImDrawListPtr(ImDrawList* nativePtr) => new ImDrawListPtr(nativePtr);
-        public static implicit operator ImDrawList* (ImDrawListPtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator ImDrawListPtr(IntPtr nativePtr) => new ImDrawListPtr(nativePtr);
+        public ImDrawListPtr(ImDrawList* nativePtr) { NativePtr = nativePtr; }
+        public ImDrawListPtr(IntPtr nativePtr) { NativePtr = (ImDrawList*)nativePtr; }
+        public static implicit operator ImDrawListPtr(ImDrawList* nativePtr) { return new ImDrawListPtr(nativePtr); }
+        public static implicit operator ImDrawList* (ImDrawListPtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator ImDrawListPtr(IntPtr nativePtr) { return new ImDrawListPtr(nativePtr); }
         public ImPtrVector<ImDrawCmdPtr> CmdBuffer => new ImPtrVector<ImDrawCmdPtr>(NativePtr->CmdBuffer, Unsafe.SizeOf<ImDrawCmd>());
         public ImVector<ushort> IdxBuffer => new ImVector<ushort>(NativePtr->IdxBuffer);
         public ImPtrVector<ImDrawVertPtr> VtxBuffer => new ImPtrVector<ImDrawVertPtr>(NativePtr->VtxBuffer, Unsafe.SizeOf<ImDrawVert>());
-        public ImDrawListFlags* Flags => (ImDrawListFlags*) &NativePtr->Flags;
-        public IntPtr* _Data => (IntPtr*) &NativePtr->_Data;
+        public ImDrawListFlags* Flags { get { return (ImDrawListFlags*) &NativePtr->Flags; } }
+        public IntPtr* _Data { get { return (IntPtr*) &NativePtr->_Data; } }
         public NullTerminatedString _OwnerName => new NullTerminatedString(NativePtr->_OwnerName);
-        public uint* _VtxCurrentIdx => (uint*) &NativePtr->_VtxCurrentIdx;
+        public uint* _VtxCurrentIdx { get { return (uint*) &NativePtr->_VtxCurrentIdx; } }
         public ImDrawVertPtr _VtxWritePtr => new ImDrawVertPtr(NativePtr->_VtxWritePtr);
-        public IntPtr _IdxWritePtr { get => (IntPtr)NativePtr->_IdxWritePtr; set => NativePtr->_IdxWritePtr = (ushort*)value; }
+        public IntPtr _IdxWritePtr { get { return (IntPtr)NativePtr->_IdxWritePtr; } set { NativePtr->_IdxWritePtr = (ushort*)value; } }
         public ImVector<Vector4> _ClipRectStack => new ImVector<Vector4>(NativePtr->_ClipRectStack);
         public ImVector<IntPtr> _TextureIdStack => new ImVector<IntPtr>(NativePtr->_TextureIdStack);
         public ImVector<Vector2> _Path => new ImVector<Vector2>(NativePtr->_Path);
-        public int* _ChannelsCurrent => (int*) &NativePtr->_ChannelsCurrent;
-        public int* _ChannelsCount => (int*) &NativePtr->_ChannelsCount;
+        public int* _ChannelsCurrent { get { return (int*) &NativePtr->_ChannelsCurrent; } }
+        public int* _ChannelsCount { get { return (int*) &NativePtr->_ChannelsCount; } }
         public ImPtrVector<ImDrawChannelPtr> _Channels => new ImPtrVector<ImDrawChannelPtr>(NativePtr->_Channels, Unsafe.SizeOf<ImDrawChannel>());
         public void ChannelsSetCurrent(int channel_index)
         {

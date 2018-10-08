@@ -280,18 +280,19 @@ namespace CodeGenerator {
                     string ptrTypeName = td.Name + "Ptr";
                     writer.PushBlock($"public unsafe partial struct {ptrTypeName}");
                     writer.WriteLine($"public {td.Name}* NativePtr {{ get; }}");
-                    writer.WriteLine($"public {ptrTypeName}({td.Name}* nativePtr) => NativePtr = nativePtr;");
-                    writer.WriteLine($"public {ptrTypeName}(IntPtr nativePtr) => NativePtr = ({td.Name}*)nativePtr;");
-                    writer.WriteLine($"public static implicit operator {ptrTypeName}({td.Name}* nativePtr) => new {ptrTypeName}(nativePtr);");
-                    writer.WriteLine($"public static implicit operator {td.Name}* ({ptrTypeName} wrappedPtr) => wrappedPtr.NativePtr;");
-                    writer.WriteLine($"public static implicit operator {ptrTypeName}(IntPtr nativePtr) => new {ptrTypeName}(nativePtr);");
+                    writer.WriteLine($"public {ptrTypeName}({td.Name}* nativePtr) {{ NativePtr = nativePtr; }}");
+                    writer.WriteLine($"public {ptrTypeName}(IntPtr nativePtr) {{ NativePtr = ({td.Name}*)nativePtr; }}");
+                    writer.WriteLine($"public static implicit operator {ptrTypeName}({td.Name}* nativePtr) {{ return new {ptrTypeName}(nativePtr); }}");
+                    writer.WriteLine($"public static implicit operator {td.Name}* ({ptrTypeName} wrappedPtr) {{ return wrappedPtr.NativePtr; }}");
+                    writer.WriteLine($"public static implicit operator {ptrTypeName}(IntPtr nativePtr) {{ return new {ptrTypeName}(nativePtr); }}");
 
                     foreach (TypeReference field in td.Fields)
                     {
                         string typeStr = GetTypeString(field.Type, field.IsFunctionPointer);
                         string rawType = typeStr;
 
-                        if (s_wellKnownFieldReplacements.TryGetValue(field.Type, out string wellKnownFieldType))
+                        string wellKnownFieldType;
+                        if (s_wellKnownFieldReplacements.TryGetValue(field.Type, out wellKnownFieldType))
                         {
                             typeStr = wellKnownFieldType;
                         }
@@ -305,12 +306,14 @@ namespace CodeGenerator {
                         {
                             string vectorElementType = GetImVectorElementType(typeStr);
 
-                            if (s_wellKnownTypes.TryGetValue(vectorElementType, out string wellKnown))
+                            string wellKnown;
+                            if (s_wellKnownTypes.TryGetValue(vectorElementType, out wellKnown))
                             {
                                 vectorElementType = wellKnown;
                             }
 
-                            if (GetWrappedType(vectorElementType + "*", out string wrappedElementType))
+                            string wrappedElementType;
+                            if (GetWrappedType(vectorElementType + "*", out wrappedElementType))
                             {
                                 writer.WriteLine($"public ImPtrVector<{wrappedElementType}> {field.Name} => new ImPtrVector<{wrappedElementType}>(NativePtr->{field.Name}, Unsafe.SizeOf<{vectorElementType}>());");
                             }
@@ -327,7 +330,8 @@ namespace CodeGenerator {
                         {
                             if (typeStr.Contains("*") && !typeStr.Contains("ImVector"))
                             {
-                                if (GetWrappedType(typeStr, out string wrappedTypeName))
+                                string wrappedTypeName;
+                                if (GetWrappedType(typeStr, out wrappedTypeName))
                                 {
                                     writer.WriteLine($"public {wrappedTypeName} {field.Name} => new {wrappedTypeName}(NativePtr->{field.Name});");
                                 }
@@ -337,12 +341,12 @@ namespace CodeGenerator {
                                 }
                                 else
                                 {
-                                    writer.WriteLine($"public IntPtr {field.Name} {{ get => (IntPtr)NativePtr->{field.Name}; set => NativePtr->{field.Name} = ({typeStr})value; }}");
+                                    writer.WriteLine($"public IntPtr {field.Name} {{ get {{ return (IntPtr)NativePtr->{field.Name}; }} set {{ NativePtr->{field.Name} = ({typeStr})value; }} }}");
                                 }
                             }
                             else
                             {
-                                writer.WriteLine($"public {typeStr}* {field.Name} => ({typeStr}*) &NativePtr->{field.Name};");
+                                writer.WriteLine($"public {typeStr}* {field.Name} {{ get {{ return ({typeStr}*) &NativePtr->{field.Name}; }} }}");
                             }
                         }
                     }
@@ -559,7 +563,8 @@ namespace CodeGenerator {
             Debug.Assert(!overload.IsMemberFunction || selfName != null);
 
             string nativeRet = GetTypeString(overload.ReturnType, false);
-            bool isWrappedType = GetWrappedType(nativeRet, out string safeRet);
+            string safeRet;
+            bool isWrappedType = GetWrappedType(nativeRet, out safeRet);
             if (!isWrappedType)
             {
                 safeRet = GetSafeType(overload.ReturnType);
@@ -580,15 +585,18 @@ namespace CodeGenerator {
 
                 string correctedIdentifier = CorrectIdentifier(tr.Name);
                 string nativeTypeName = GetTypeString(tr.Type, tr.IsFunctionPointer);
-
+                string defaultVal;
+                string wrappedParamType;
                 if (tr.Type == "char*")
                 {
                     string textToEncode = correctedIdentifier;
                     bool hasDefault = false;
-                    if (defaultValues.TryGetValue(tr.Name, out string defaultStrVal))
+                    string defaultStrVal;
+                    if (defaultValues.TryGetValue(tr.Name, out defaultStrVal))
                     {
                         hasDefault = true;
-                        if (!CorrectDefaultValue(defaultStrVal, tr, out string correctedDefault))
+                        string correctedDefault;
+                        if (!CorrectDefaultValue(defaultStrVal, tr, out correctedDefault))
                         {
                             correctedDefault = defaultStrVal;
                         }
@@ -651,9 +659,10 @@ namespace CodeGenerator {
                     preCallLines.Add($"    offset += {correctedIdentifier}_byteCounts[i] + 1;");
                     preCallLines.Add("}");
                 }
-                else if (defaultValues.TryGetValue(tr.Name, out string defaultVal))
+                else if (defaultValues.TryGetValue(tr.Name, out defaultVal))
                 {
-                    if (!CorrectDefaultValue(defaultVal, tr, out string correctedDefault))
+                    string correctedDefault;
+                    if (!CorrectDefaultValue(defaultVal, tr, out correctedDefault))
                     {
                         correctedDefault = defaultVal;
                     }
@@ -680,7 +689,7 @@ namespace CodeGenerator {
                     marshalledParameters[i] = new MarshalledParameter("IntPtr", false, nativeArgName, false);
                     preCallLines.Add($"void* {nativeArgName} = {correctedIdentifier}.ToPointer();");
                 }
-                else if (GetWrappedType(tr.Type, out string wrappedParamType)
+                else if (GetWrappedType(tr.Type, out wrappedParamType)
                     && !s_wellKnownTypes.ContainsKey(tr.Type)
                     && !s_wellKnownTypes.ContainsKey(tr.Type.Substring(0, tr.Type.Length - 1)))
                 {
@@ -888,7 +897,8 @@ namespace CodeGenerator {
             if (typeName.EndsWith("**")) { pointerLevel = 2; }
             else if (typeName.EndsWith("*")) { pointerLevel = 1; }
 
-            if (!s_wellKnownTypes.TryGetValue(typeName, out string typeStr))
+            string typeStr;
+            if (!s_wellKnownTypes.TryGetValue(typeName, out typeStr))
             {
                 if (s_wellKnownTypes.TryGetValue(typeName.Substring(0, typeName.Length - pointerLevel), out typeStr))
                 {
@@ -906,7 +916,8 @@ namespace CodeGenerator {
 
         private static string CorrectIdentifier(string identifier)
         {
-            if (s_identifierReplacements.TryGetValue(identifier, out string replacement))
+            string replacement;
+            if (s_identifierReplacements.TryGetValue(identifier, out replacement))
             {
                 return replacement;
             }
@@ -928,7 +939,7 @@ namespace CodeGenerator {
         public EnumDefinition(string name, EnumMember[] elements)
         {
             Name = name;
-            if (Name.EndsWith('_'))
+            if (Name.EndsWith("_"))
             {
                 FriendlyName = Name.Substring(0, Name.Length - 1);
             }
@@ -963,7 +974,7 @@ namespace CodeGenerator {
                 ret = memberName.Substring(Name.Length);
             }
 
-            if (ret.EndsWith('_'))
+            if (ret.EndsWith("_"))
             {
                 ret = ret.Substring(0, ret.Length - 1);
             }
@@ -1031,7 +1042,8 @@ namespace CodeGenerator {
                 return firstVal + secondVal;
             }
 
-            if (!int.TryParse(sizePart, out int ret))
+            int ret;
+            if (!int.TryParse(sizePart, out ret))
             {
                 foreach (EnumDefinition ed in enums)
                 {

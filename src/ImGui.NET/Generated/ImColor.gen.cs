@@ -12,12 +12,12 @@ namespace ImGuiNET
     public unsafe partial struct ImColorPtr
     {
         public ImColor* NativePtr { get; }
-        public ImColorPtr(ImColor* nativePtr) => NativePtr = nativePtr;
-        public ImColorPtr(IntPtr nativePtr) => NativePtr = (ImColor*)nativePtr;
-        public static implicit operator ImColorPtr(ImColor* nativePtr) => new ImColorPtr(nativePtr);
-        public static implicit operator ImColor* (ImColorPtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator ImColorPtr(IntPtr nativePtr) => new ImColorPtr(nativePtr);
-        public Vector4* Value => (Vector4*) &NativePtr->Value;
+        public ImColorPtr(ImColor* nativePtr) { NativePtr = nativePtr; }
+        public ImColorPtr(IntPtr nativePtr) { NativePtr = (ImColor*)nativePtr; }
+        public static implicit operator ImColorPtr(ImColor* nativePtr) { return new ImColorPtr(nativePtr); }
+        public static implicit operator ImColor* (ImColorPtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator ImColorPtr(IntPtr nativePtr) { return new ImColorPtr(nativePtr); }
+        public Vector4* Value { get { return (Vector4*) &NativePtr->Value; } }
         public void SetHSV(float h, float s, float v)
         {
             float a = 1.0f;

@@ -26,22 +26,22 @@ namespace ImGuiNET
     public unsafe partial struct ImFontAtlasPtr
     {
         public ImFontAtlas* NativePtr { get; }
-        public ImFontAtlasPtr(ImFontAtlas* nativePtr) => NativePtr = nativePtr;
-        public ImFontAtlasPtr(IntPtr nativePtr) => NativePtr = (ImFontAtlas*)nativePtr;
-        public static implicit operator ImFontAtlasPtr(ImFontAtlas* nativePtr) => new ImFontAtlasPtr(nativePtr);
-        public static implicit operator ImFontAtlas* (ImFontAtlasPtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator ImFontAtlasPtr(IntPtr nativePtr) => new ImFontAtlasPtr(nativePtr);
-        public Bool8* Locked => (Bool8*) &NativePtr->Locked;
-        public ImFontAtlasFlags* Flags => (ImFontAtlasFlags*) &NativePtr->Flags;
-        public IntPtr* TexID => (IntPtr*) &NativePtr->TexID;
-        public int* TexDesiredWidth => (int*) &NativePtr->TexDesiredWidth;
-        public int* TexGlyphPadding => (int*) &NativePtr->TexGlyphPadding;
-        public IntPtr TexPixelsAlpha8 { get => (IntPtr)NativePtr->TexPixelsAlpha8; set => NativePtr->TexPixelsAlpha8 = (byte*)value; }
-        public IntPtr TexPixelsRGBA32 { get => (IntPtr)NativePtr->TexPixelsRGBA32; set => NativePtr->TexPixelsRGBA32 = (uint*)value; }
-        public int* TexWidth => (int*) &NativePtr->TexWidth;
-        public int* TexHeight => (int*) &NativePtr->TexHeight;
-        public Vector2* TexUvScale => (Vector2*) &NativePtr->TexUvScale;
-        public Vector2* TexUvWhitePixel => (Vector2*) &NativePtr->TexUvWhitePixel;
+        public ImFontAtlasPtr(ImFontAtlas* nativePtr) { NativePtr = nativePtr; }
+        public ImFontAtlasPtr(IntPtr nativePtr) { NativePtr = (ImFontAtlas*)nativePtr; }
+        public static implicit operator ImFontAtlasPtr(ImFontAtlas* nativePtr) { return new ImFontAtlasPtr(nativePtr); }
+        public static implicit operator ImFontAtlas* (ImFontAtlasPtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator ImFontAtlasPtr(IntPtr nativePtr) { return new ImFontAtlasPtr(nativePtr); }
+        public Bool8* Locked { get { return (Bool8*) &NativePtr->Locked; } }
+        public ImFontAtlasFlags* Flags { get { return (ImFontAtlasFlags*) &NativePtr->Flags; } }
+        public IntPtr* TexID { get { return (IntPtr*) &NativePtr->TexID; } }
+        public int* TexDesiredWidth { get { return (int*) &NativePtr->TexDesiredWidth; } }
+        public int* TexGlyphPadding { get { return (int*) &NativePtr->TexGlyphPadding; } }
+        public IntPtr TexPixelsAlpha8 { get { return (IntPtr)NativePtr->TexPixelsAlpha8; } set { NativePtr->TexPixelsAlpha8 = (byte*)value; } }
+        public IntPtr TexPixelsRGBA32 { get { return (IntPtr)NativePtr->TexPixelsRGBA32; } set { NativePtr->TexPixelsRGBA32 = (uint*)value; } }
+        public int* TexWidth { get { return (int*) &NativePtr->TexWidth; } }
+        public int* TexHeight { get { return (int*) &NativePtr->TexHeight; } }
+        public Vector2* TexUvScale { get { return (Vector2*) &NativePtr->TexUvScale; } }
+        public Vector2* TexUvWhitePixel { get { return (Vector2*) &NativePtr->TexUvWhitePixel; } }
         public ImVector<ImFontPtr> Fonts => new ImVector<ImFontPtr>(NativePtr->Fonts);
         public ImVector<CustomRect> CustomRects => new ImVector<CustomRect>(NativePtr->CustomRects);
         public ImPtrVector<ImFontConfigPtr> ConfigData => new ImPtrVector<ImFontConfigPtr>(NativePtr->ConfigData, Unsafe.SizeOf<ImFontConfig>());

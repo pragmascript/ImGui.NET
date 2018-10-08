@@ -17,17 +17,17 @@ namespace ImGuiNET
     public unsafe partial struct ImGuiListClipperPtr
     {
         public ImGuiListClipper* NativePtr { get; }
-        public ImGuiListClipperPtr(ImGuiListClipper* nativePtr) => NativePtr = nativePtr;
-        public ImGuiListClipperPtr(IntPtr nativePtr) => NativePtr = (ImGuiListClipper*)nativePtr;
-        public static implicit operator ImGuiListClipperPtr(ImGuiListClipper* nativePtr) => new ImGuiListClipperPtr(nativePtr);
-        public static implicit operator ImGuiListClipper* (ImGuiListClipperPtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator ImGuiListClipperPtr(IntPtr nativePtr) => new ImGuiListClipperPtr(nativePtr);
-        public float* StartPosY => (float*) &NativePtr->StartPosY;
-        public float* ItemsHeight => (float*) &NativePtr->ItemsHeight;
-        public int* ItemsCount => (int*) &NativePtr->ItemsCount;
-        public int* StepNo => (int*) &NativePtr->StepNo;
-        public int* DisplayStart => (int*) &NativePtr->DisplayStart;
-        public int* DisplayEnd => (int*) &NativePtr->DisplayEnd;
+        public ImGuiListClipperPtr(ImGuiListClipper* nativePtr) { NativePtr = nativePtr; }
+        public ImGuiListClipperPtr(IntPtr nativePtr) { NativePtr = (ImGuiListClipper*)nativePtr; }
+        public static implicit operator ImGuiListClipperPtr(ImGuiListClipper* nativePtr) { return new ImGuiListClipperPtr(nativePtr); }
+        public static implicit operator ImGuiListClipper* (ImGuiListClipperPtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator ImGuiListClipperPtr(IntPtr nativePtr) { return new ImGuiListClipperPtr(nativePtr); }
+        public float* StartPosY { get { return (float*) &NativePtr->StartPosY; } }
+        public float* ItemsHeight { get { return (float*) &NativePtr->ItemsHeight; } }
+        public int* ItemsCount { get { return (int*) &NativePtr->ItemsCount; } }
+        public int* StepNo { get { return (int*) &NativePtr->StepNo; } }
+        public int* DisplayStart { get { return (int*) &NativePtr->DisplayStart; } }
+        public int* DisplayEnd { get { return (int*) &NativePtr->DisplayEnd; } }
         public void End()
         {
             ImGuiNative.ImGuiListClipper_End(NativePtr);

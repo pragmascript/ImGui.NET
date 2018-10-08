@@ -12,11 +12,11 @@ namespace ImGuiNET
     public unsafe partial struct GlyphRangesBuilderPtr
     {
         public GlyphRangesBuilder* NativePtr { get; }
-        public GlyphRangesBuilderPtr(GlyphRangesBuilder* nativePtr) => NativePtr = nativePtr;
-        public GlyphRangesBuilderPtr(IntPtr nativePtr) => NativePtr = (GlyphRangesBuilder*)nativePtr;
-        public static implicit operator GlyphRangesBuilderPtr(GlyphRangesBuilder* nativePtr) => new GlyphRangesBuilderPtr(nativePtr);
-        public static implicit operator GlyphRangesBuilder* (GlyphRangesBuilderPtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator GlyphRangesBuilderPtr(IntPtr nativePtr) => new GlyphRangesBuilderPtr(nativePtr);
+        public GlyphRangesBuilderPtr(GlyphRangesBuilder* nativePtr) { NativePtr = nativePtr; }
+        public GlyphRangesBuilderPtr(IntPtr nativePtr) { NativePtr = (GlyphRangesBuilder*)nativePtr; }
+        public static implicit operator GlyphRangesBuilderPtr(GlyphRangesBuilder* nativePtr) { return new GlyphRangesBuilderPtr(nativePtr); }
+        public static implicit operator GlyphRangesBuilder* (GlyphRangesBuilderPtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator GlyphRangesBuilderPtr(IntPtr nativePtr) { return new GlyphRangesBuilderPtr(nativePtr); }
         public ImVector<byte> UsedChars => new ImVector<byte>(NativePtr->UsedChars);
         public void SetBit(int n)
         {

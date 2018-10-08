@@ -27,27 +27,27 @@ namespace ImGuiNET
     public unsafe partial struct ImFontPtr
     {
         public ImFont* NativePtr { get; }
-        public ImFontPtr(ImFont* nativePtr) => NativePtr = nativePtr;
-        public ImFontPtr(IntPtr nativePtr) => NativePtr = (ImFont*)nativePtr;
-        public static implicit operator ImFontPtr(ImFont* nativePtr) => new ImFontPtr(nativePtr);
-        public static implicit operator ImFont* (ImFontPtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator ImFontPtr(IntPtr nativePtr) => new ImFontPtr(nativePtr);
-        public float* FontSize => (float*) &NativePtr->FontSize;
-        public float* Scale => (float*) &NativePtr->Scale;
-        public Vector2* DisplayOffset => (Vector2*) &NativePtr->DisplayOffset;
+        public ImFontPtr(ImFont* nativePtr) { NativePtr = nativePtr; }
+        public ImFontPtr(IntPtr nativePtr) { NativePtr = (ImFont*)nativePtr; }
+        public static implicit operator ImFontPtr(ImFont* nativePtr) { return new ImFontPtr(nativePtr); }
+        public static implicit operator ImFont* (ImFontPtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator ImFontPtr(IntPtr nativePtr) { return new ImFontPtr(nativePtr); }
+        public float* FontSize { get { return (float*) &NativePtr->FontSize; } }
+        public float* Scale { get { return (float*) &NativePtr->Scale; } }
+        public Vector2* DisplayOffset { get { return (Vector2*) &NativePtr->DisplayOffset; } }
         public ImPtrVector<ImFontGlyphPtr> Glyphs => new ImPtrVector<ImFontGlyphPtr>(NativePtr->Glyphs, Unsafe.SizeOf<ImFontGlyph>());
         public ImVector<float> IndexAdvanceX => new ImVector<float>(NativePtr->IndexAdvanceX);
         public ImVector<ushort> IndexLookup => new ImVector<ushort>(NativePtr->IndexLookup);
         public ImFontGlyphPtr FallbackGlyph => new ImFontGlyphPtr(NativePtr->FallbackGlyph);
-        public float* FallbackAdvanceX => (float*) &NativePtr->FallbackAdvanceX;
-        public ushort* FallbackChar => (ushort*) &NativePtr->FallbackChar;
-        public short* ConfigDataCount => (short*) &NativePtr->ConfigDataCount;
+        public float* FallbackAdvanceX { get { return (float*) &NativePtr->FallbackAdvanceX; } }
+        public ushort* FallbackChar { get { return (ushort*) &NativePtr->FallbackChar; } }
+        public short* ConfigDataCount { get { return (short*) &NativePtr->ConfigDataCount; } }
         public ImFontConfigPtr ConfigData => new ImFontConfigPtr(NativePtr->ConfigData);
         public ImFontAtlasPtr ContainerAtlas => new ImFontAtlasPtr(NativePtr->ContainerAtlas);
-        public float* Ascent => (float*) &NativePtr->Ascent;
-        public float* Descent => (float*) &NativePtr->Descent;
-        public Bool8* DirtyLookupTables => (Bool8*) &NativePtr->DirtyLookupTables;
-        public int* MetricsTotalSurface => (int*) &NativePtr->MetricsTotalSurface;
+        public float* Ascent { get { return (float*) &NativePtr->Ascent; } }
+        public float* Descent { get { return (float*) &NativePtr->Descent; } }
+        public Bool8* DirtyLookupTables { get { return (Bool8*) &NativePtr->DirtyLookupTables; } }
+        public int* MetricsTotalSurface { get { return (int*) &NativePtr->MetricsTotalSurface; } }
         public void AddRemapChar(ushort dst, ushort src)
         {
             byte overwrite_dst = 1;

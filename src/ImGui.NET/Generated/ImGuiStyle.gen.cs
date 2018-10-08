@@ -83,40 +83,40 @@ namespace ImGuiNET
     public unsafe partial struct ImGuiStylePtr
     {
         public ImGuiStyle* NativePtr { get; }
-        public ImGuiStylePtr(ImGuiStyle* nativePtr) => NativePtr = nativePtr;
-        public ImGuiStylePtr(IntPtr nativePtr) => NativePtr = (ImGuiStyle*)nativePtr;
-        public static implicit operator ImGuiStylePtr(ImGuiStyle* nativePtr) => new ImGuiStylePtr(nativePtr);
-        public static implicit operator ImGuiStyle* (ImGuiStylePtr wrappedPtr) => wrappedPtr.NativePtr;
-        public static implicit operator ImGuiStylePtr(IntPtr nativePtr) => new ImGuiStylePtr(nativePtr);
-        public float* Alpha => (float*) &NativePtr->Alpha;
-        public Vector2* WindowPadding => (Vector2*) &NativePtr->WindowPadding;
-        public float* WindowRounding => (float*) &NativePtr->WindowRounding;
-        public float* WindowBorderSize => (float*) &NativePtr->WindowBorderSize;
-        public Vector2* WindowMinSize => (Vector2*) &NativePtr->WindowMinSize;
-        public Vector2* WindowTitleAlign => (Vector2*) &NativePtr->WindowTitleAlign;
-        public float* ChildRounding => (float*) &NativePtr->ChildRounding;
-        public float* ChildBorderSize => (float*) &NativePtr->ChildBorderSize;
-        public float* PopupRounding => (float*) &NativePtr->PopupRounding;
-        public float* PopupBorderSize => (float*) &NativePtr->PopupBorderSize;
-        public Vector2* FramePadding => (Vector2*) &NativePtr->FramePadding;
-        public float* FrameRounding => (float*) &NativePtr->FrameRounding;
-        public float* FrameBorderSize => (float*) &NativePtr->FrameBorderSize;
-        public Vector2* ItemSpacing => (Vector2*) &NativePtr->ItemSpacing;
-        public Vector2* ItemInnerSpacing => (Vector2*) &NativePtr->ItemInnerSpacing;
-        public Vector2* TouchExtraPadding => (Vector2*) &NativePtr->TouchExtraPadding;
-        public float* IndentSpacing => (float*) &NativePtr->IndentSpacing;
-        public float* ColumnsMinSpacing => (float*) &NativePtr->ColumnsMinSpacing;
-        public float* ScrollbarSize => (float*) &NativePtr->ScrollbarSize;
-        public float* ScrollbarRounding => (float*) &NativePtr->ScrollbarRounding;
-        public float* GrabMinSize => (float*) &NativePtr->GrabMinSize;
-        public float* GrabRounding => (float*) &NativePtr->GrabRounding;
-        public Vector2* ButtonTextAlign => (Vector2*) &NativePtr->ButtonTextAlign;
-        public Vector2* DisplayWindowPadding => (Vector2*) &NativePtr->DisplayWindowPadding;
-        public Vector2* DisplaySafeAreaPadding => (Vector2*) &NativePtr->DisplaySafeAreaPadding;
-        public float* MouseCursorScale => (float*) &NativePtr->MouseCursorScale;
-        public Bool8* AntiAliasedLines => (Bool8*) &NativePtr->AntiAliasedLines;
-        public Bool8* AntiAliasedFill => (Bool8*) &NativePtr->AntiAliasedFill;
-        public float* CurveTessellationTol => (float*) &NativePtr->CurveTessellationTol;
+        public ImGuiStylePtr(ImGuiStyle* nativePtr) { NativePtr = nativePtr; }
+        public ImGuiStylePtr(IntPtr nativePtr) { NativePtr = (ImGuiStyle*)nativePtr; }
+        public static implicit operator ImGuiStylePtr(ImGuiStyle* nativePtr) { return new ImGuiStylePtr(nativePtr); }
+        public static implicit operator ImGuiStyle* (ImGuiStylePtr wrappedPtr) { return wrappedPtr.NativePtr; }
+        public static implicit operator ImGuiStylePtr(IntPtr nativePtr) { return new ImGuiStylePtr(nativePtr); }
+        public float* Alpha { get { return (float*) &NativePtr->Alpha; } }
+        public Vector2* WindowPadding { get { return (Vector2*) &NativePtr->WindowPadding; } }
+        public float* WindowRounding { get { return (float*) &NativePtr->WindowRounding; } }
+        public float* WindowBorderSize { get { return (float*) &NativePtr->WindowBorderSize; } }
+        public Vector2* WindowMinSize { get { return (Vector2*) &NativePtr->WindowMinSize; } }
+        public Vector2* WindowTitleAlign { get { return (Vector2*) &NativePtr->WindowTitleAlign; } }
+        public float* ChildRounding { get { return (float*) &NativePtr->ChildRounding; } }
+        public float* ChildBorderSize { get { return (float*) &NativePtr->ChildBorderSize; } }
+        public float* PopupRounding { get { return (float*) &NativePtr->PopupRounding; } }
+        public float* PopupBorderSize { get { return (float*) &NativePtr->PopupBorderSize; } }
+        public Vector2* FramePadding { get { return (Vector2*) &NativePtr->FramePadding; } }
+        public float* FrameRounding { get { return (float*) &NativePtr->FrameRounding; } }
+        public float* FrameBorderSize { get { return (float*) &NativePtr->FrameBorderSize; } }
+        public Vector2* ItemSpacing { get { return (Vector2*) &NativePtr->ItemSpacing; } }
+        public Vector2* ItemInnerSpacing { get { return (Vector2*) &NativePtr->ItemInnerSpacing; } }
+        public Vector2* TouchExtraPadding { get { return (Vector2*) &NativePtr->TouchExtraPadding; } }
+        public float* IndentSpacing { get { return (float*) &NativePtr->IndentSpacing; } }
+        public float* ColumnsMinSpacing { get { return (float*) &NativePtr->ColumnsMinSpacing; } }
+        public float* ScrollbarSize { get { return (float*) &NativePtr->ScrollbarSize; } }
+        public float* ScrollbarRounding { get { return (float*) &NativePtr->ScrollbarRounding; } }
+        public float* GrabMinSize { get { return (float*) &NativePtr->GrabMinSize; } }
+        public float* GrabRounding { get { return (float*) &NativePtr->GrabRounding; } }
+        public Vector2* ButtonTextAlign { get { return (Vector2*) &NativePtr->ButtonTextAlign; } }
+        public Vector2* DisplayWindowPadding { get { return (Vector2*) &NativePtr->DisplayWindowPadding; } }
+        public Vector2* DisplaySafeAreaPadding { get { return (Vector2*) &NativePtr->DisplaySafeAreaPadding; } }
+        public float* MouseCursorScale { get { return (float*) &NativePtr->MouseCursorScale; } }
+        public Bool8* AntiAliasedLines { get { return (Bool8*) &NativePtr->AntiAliasedLines; } }
+        public Bool8* AntiAliasedFill { get { return (Bool8*) &NativePtr->AntiAliasedFill; } }
+        public float* CurveTessellationTol { get { return (float*) &NativePtr->CurveTessellationTol; } }
         public RangeAccessor<Vector4> Colors => new RangeAccessor<Vector4>(&NativePtr->Colors_0, 43);
         public void ScaleAllSizes(float scale_factor)
         {
