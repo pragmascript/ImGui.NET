@@ -5,11 +5,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
-namespace CodeGenerator
-{
+namespace CodeGenerator {
     class Program
     {
         private static readonly Dictionary<string, string> s_wellKnownTypes = new Dictionary<string, string>()
