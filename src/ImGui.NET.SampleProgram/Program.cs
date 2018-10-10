@@ -27,13 +27,15 @@ namespace ImGuiNET
         private static bool _showMemoryEditor = false;
         private static byte[] _memoryEditorData;
 
+        static void SetThing(out float i, float val) { i = val; }
+
         static void Main(string[] args)
         {
             // Create window, GraphicsDevice, and all resources necessary for the demo.
             VeldridStartup.CreateWindowAndGraphicsDevice(
                 new WindowCreateInfo(50, 50, 1280, 720, WindowState.Normal, "ImGui.NET Sample Program"),
                 new GraphicsDeviceOptions(true, null, true),
-                GraphicsBackend.OpenGL,
+                GraphicsBackend.Vulkan,
                 out _window,
                 out _gd);
             _window.Resized += () =>
@@ -72,28 +74,6 @@ namespace ImGuiNET
             _gd.Dispose();
         }
 
-        private static void DrawTestWindow() {
-            ImGui.Begin("TestWindow");
-
-            Vector2 cursorPos;
-
-            cursorPos = ImGui.GetCursorPos();
-            ImGui.Button("more button 1");
-            cursorPos = ImGui.GetCursorPos();
-            ImGui.Button("more button 2");
-            cursorPos = ImGui.GetCursorPos();
-
-            var tempCursorPos = ImGui.GetCursorPos();
-            ImGui.SetCursorPos(tempCursorPos);
-
-            ImGui.Button("more button 3");
-            cursorPos = ImGui.GetCursorPos();
-            ImGui.Button("more button 4");
-            cursorPos = ImGui.GetCursorPos();
-
-            ImGui.End();
-        }
-
         private static unsafe void SubmitUI()
         {
             // Demo code adapted from the official Dear ImGui demo program:
@@ -120,12 +100,7 @@ namespace ImGuiNET
 
                 ImGui.DragInt("Draggable Int", ref _dragInt);
 
-                float framerate;
-                unsafe 
-                {
-                    framerate = *ImGui.GetIO().Framerate;
-                }
-                
+                float framerate = ImGui.GetIO().Framerate;
                 ImGui.Text($"Application average {1000.0f / framerate:0.##} ms/frame ({framerate:0.#} FPS)");
             }
 
@@ -151,10 +126,7 @@ namespace ImGuiNET
             }
 
             ImGuiIOPtr io = ImGui.GetIO();
-            unsafe {
-                *io.DeltaTime = 2.0f;
-            }
-
+            SetThing(out io.DeltaTime, 2f);
 
             if (_showMemoryEditor)
             {

@@ -316,29 +316,31 @@ namespace ImGuiNET
         /// Sets per-frame data based on the associated window.
         /// This is called by Update(float).
         /// </summary>
-        private unsafe void SetPerFrameImGuiData(float deltaSeconds)
+        private void SetPerFrameImGuiData(float deltaSeconds)
         {
             ImGuiIOPtr io = ImGui.GetIO();
-            *io.DisplaySize = new Vector2(
+            io.DisplaySize = new Vector2(
                 _windowWidth / _scaleFactor.X,
                 _windowHeight / _scaleFactor.Y);
-            *io.DisplayFramebufferScale = _scaleFactor;
-            *io.DeltaTime = deltaSeconds; // DeltaTime is in seconds.
+            io.DisplayFramebufferScale = _scaleFactor;
+            io.DeltaTime = deltaSeconds; // DeltaTime is in seconds.
         }
 
-        private unsafe void UpdateImGuiInput(InputSnapshot snapshot)
+        private void UpdateImGuiInput(InputSnapshot snapshot)
         {
             var io = ImGui.GetIO();
 
             Vector2 mousePosition = snapshot.MousePosition;
 
-            *io.MousePos = mousePosition;
+            io.MousePos = mousePosition;
             io.MouseDown[0] = snapshot.IsMouseDown(MouseButton.Left);
             io.MouseDown[1] = snapshot.IsMouseDown(MouseButton.Right);
             io.MouseDown[2] = snapshot.IsMouseDown(MouseButton.Middle);
 
             float delta = snapshot.WheelDelta;
-            *io.MouseWheel = delta;
+            io.MouseWheel = delta;
+
+            io.MouseWheel = delta;
 
             IReadOnlyList<char> keyCharPresses = snapshot.KeyCharPresses;
             for (int i = 0; i < keyCharPresses.Count; i++)
@@ -370,10 +372,10 @@ namespace ImGuiNET
                 }
             }
 
-            *io.KeyCtrl = _controlDown;
-            *io.KeyAlt = _altDown;
-            *io.KeyShift = _shiftDown;
-            *io.KeySuper = _winKeyDown;
+            io.KeyCtrl = _controlDown;
+            io.KeyAlt = _altDown;
+            io.KeyShift = _shiftDown;
+            io.KeySuper = _winKeyDown;
         }
 
         private static void SetKeyMappings()
@@ -400,31 +402,31 @@ namespace ImGuiNET
             io.KeyMap[(int)ImGuiKey.Z] = (int)Key.Z;
         }
 
-        private unsafe void RenderImDrawData(ImDrawDataPtr draw_data, GraphicsDevice gd, CommandList cl)
+        private void RenderImDrawData(ImDrawDataPtr draw_data, GraphicsDevice gd, CommandList cl)
         {
             uint vertexOffsetInVertices = 0;
             uint indexOffsetInElements = 0;
 
-            if (*draw_data.CmdListsCount == 0)
+            if (draw_data.CmdListsCount == 0)
             {
                 return;
             }
 
-            uint totalVBSize = (uint)(*draw_data.TotalVtxCount * Unsafe.SizeOf<ImDrawVert>());
+            uint totalVBSize = (uint)(draw_data.TotalVtxCount * Unsafe.SizeOf<ImDrawVert>());
             if (totalVBSize > _vertexBuffer.SizeInBytes)
             {
                 gd.DisposeWhenIdle(_vertexBuffer);
                 _vertexBuffer = gd.ResourceFactory.CreateBuffer(new BufferDescription((uint)(totalVBSize * 1.5f), BufferUsage.VertexBuffer | BufferUsage.Dynamic));
             }
 
-            uint totalIBSize = (uint)(*draw_data.TotalIdxCount * sizeof(ushort));
+            uint totalIBSize = (uint)(draw_data.TotalIdxCount * sizeof(ushort));
             if (totalIBSize > _indexBuffer.SizeInBytes)
             {
                 gd.DisposeWhenIdle(_indexBuffer);
                 _indexBuffer = gd.ResourceFactory.CreateBuffer(new BufferDescription((uint)(totalIBSize * 1.5f), BufferUsage.IndexBuffer | BufferUsage.Dynamic));
             }
 
-            for (int i = 0; i < *draw_data.CmdListsCount; i++)
+            for (int i = 0; i < draw_data.CmdListsCount; i++)
             {
                 ImDrawListPtr cmd_list = draw_data.CmdListsRange[i];
 
@@ -448,8 +450,8 @@ namespace ImGuiNET
             ImGuiIOPtr io = ImGui.GetIO();
             Matrix4x4 mvp = Matrix4x4.CreateOrthographicOffCenter(
                 0f,
-                io.DisplaySize->X,
-                io.DisplaySize->Y,
+                io.DisplaySize.X,
+                io.DisplaySize.Y,
                 0.0f,
                 -1.0f,
                 1.0f);
@@ -461,43 +463,43 @@ namespace ImGuiNET
             cl.SetPipeline(_pipeline);
             cl.SetGraphicsResourceSet(0, _mainResourceSet);
 
-            draw_data.ScaleClipRects(*io.DisplayFramebufferScale);
+            draw_data.ScaleClipRects(io.DisplayFramebufferScale);
 
             // Render command lists
             int vtx_offset = 0;
             int idx_offset = 0;
-            for (int n = 0; n < *draw_data.CmdListsCount; n++)
+            for (int n = 0; n < draw_data.CmdListsCount; n++)
             {
                 ImDrawListPtr cmd_list = draw_data.CmdListsRange[n];
                 for (int cmd_i = 0; cmd_i < cmd_list.CmdBuffer.Size; cmd_i++)
                 {
                     ImDrawCmdPtr pcmd = cmd_list.CmdBuffer[cmd_i];
-                    if (*pcmd.UserCallback != IntPtr.Zero)
+                    if (pcmd.UserCallback != IntPtr.Zero)
                     {
                         throw new NotImplementedException();
                     }
                     else
                     {
-                        if (*pcmd.TextureId != IntPtr.Zero)
+                        if (pcmd.TextureId != IntPtr.Zero)
                         {
-                            if (*pcmd.TextureId == _fontAtlasID)
+                            if (pcmd.TextureId == _fontAtlasID)
                             {
                                 cl.SetGraphicsResourceSet(1, _fontTextureResourceSet);
                             }
                             else
                             {
-                                cl.SetGraphicsResourceSet(1, GetImageResourceSet(*pcmd.TextureId));
+                                cl.SetGraphicsResourceSet(1, GetImageResourceSet(pcmd.TextureId));
                             }
                         }
 
                         cl.SetScissorRect(
                             0,
-                            (uint)pcmd.ClipRect->X,
-                            (uint)pcmd.ClipRect->Y,
-                            (uint)(pcmd.ClipRect->Z - pcmd.ClipRect->X),
-                            (uint)(pcmd.ClipRect->W - pcmd.ClipRect->Y));
+                            (uint)pcmd.ClipRect.X,
+                            (uint)pcmd.ClipRect.Y,
+                            (uint)(pcmd.ClipRect.Z - pcmd.ClipRect.X),
+                            (uint)(pcmd.ClipRect.W - pcmd.ClipRect.Y));
 
-                        cl.DrawIndexed(*pcmd.ElemCount, 1, (uint)idx_offset, vtx_offset, 0);
+                        cl.DrawIndexed(pcmd.ElemCount, 1, (uint)idx_offset, vtx_offset, 0);
                     }
 
                     idx_offset += (int)pcmd.ElemCount;

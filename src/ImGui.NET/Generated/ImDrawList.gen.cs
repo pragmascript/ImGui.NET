@@ -56,11 +56,11 @@ namespace ImGuiNET
         }
         public void AddPolyline(ref Vector2 points, int num_points, uint col, bool closed, float thickness)
         {
-            Vector2 native_points_val = points;
-            Vector2* native_points = &native_points_val;
             byte native_closed = closed ? (byte)1 : (byte)0;
-            ImGuiNative.ImDrawList_AddPolyline(NativePtr, native_points, num_points, col, native_closed, thickness);
-            points = native_points_val;
+            fixed (Vector2* native_points = &points)
+            {
+                ImGuiNative.ImDrawList_AddPolyline(NativePtr, native_points, num_points, col, native_closed, thickness);
+            }
         }
         public void PopClipRect()
         {
@@ -231,10 +231,10 @@ namespace ImGuiNET
         }
         public void AddConvexPolyFilled(ref Vector2 points, int num_points, uint col)
         {
-            Vector2 native_points_val = points;
-            Vector2* native_points = &native_points_val;
-            ImGuiNative.ImDrawList_AddConvexPolyFilled(NativePtr, native_points, num_points, col);
-            points = native_points_val;
+            fixed (Vector2* native_points = &points)
+            {
+                ImGuiNative.ImDrawList_AddConvexPolyFilled(NativePtr, native_points, num_points, col);
+            }
         }
         public void AddImageQuad(IntPtr user_texture_id, Vector2 a, Vector2 b, Vector2 c, Vector2 d)
         {
@@ -296,114 +296,6 @@ namespace ImGuiNET
         public void AddImage(IntPtr user_texture_id, Vector2 a, Vector2 b, Vector2 uv_a, Vector2 uv_b, uint col)
         {
             ImGuiNative.ImDrawList_AddImage(NativePtr, user_texture_id, a, b, uv_a, uv_b, col);
-        }
-        public void AddText(Vector2 pos, uint col, string text_begin)
-        {
-            int text_begin_byteCount = Encoding.UTF8.GetByteCount(text_begin);
-            byte* native_text_begin = stackalloc byte[text_begin_byteCount + 1];
-            fixed (char* text_begin_ptr = text_begin)
-            {
-                int native_text_begin_offset = Encoding.UTF8.GetBytes(text_begin_ptr, text_begin.Length, native_text_begin, text_begin_byteCount);
-                native_text_begin[native_text_begin_offset] = 0;
-            }
-            byte* native_text_end = null;
-            ImGuiNative.ImDrawList_AddText(NativePtr, pos, col, native_text_begin, native_text_end);
-        }
-        public void AddText(Vector2 pos, uint col, string text_begin, string text_end)
-        {
-            int text_begin_byteCount = Encoding.UTF8.GetByteCount(text_begin);
-            byte* native_text_begin = stackalloc byte[text_begin_byteCount + 1];
-            fixed (char* text_begin_ptr = text_begin)
-            {
-                int native_text_begin_offset = Encoding.UTF8.GetBytes(text_begin_ptr, text_begin.Length, native_text_begin, text_begin_byteCount);
-                native_text_begin[native_text_begin_offset] = 0;
-            }
-            int text_end_byteCount = Encoding.UTF8.GetByteCount(text_end);
-            byte* native_text_end = stackalloc byte[text_end_byteCount + 1];
-            fixed (char* text_end_ptr = text_end)
-            {
-                int native_text_end_offset = Encoding.UTF8.GetBytes(text_end_ptr, text_end.Length, native_text_end, text_end_byteCount);
-                native_text_end[native_text_end_offset] = 0;
-            }
-            ImGuiNative.ImDrawList_AddText(NativePtr, pos, col, native_text_begin, native_text_end);
-        }
-        public void AddText(ImFontPtr font, float font_size, Vector2 pos, uint col, string text_begin)
-        {
-            ImFont* native_font = font.NativePtr;
-            int text_begin_byteCount = Encoding.UTF8.GetByteCount(text_begin);
-            byte* native_text_begin = stackalloc byte[text_begin_byteCount + 1];
-            fixed (char* text_begin_ptr = text_begin)
-            {
-                int native_text_begin_offset = Encoding.UTF8.GetBytes(text_begin_ptr, text_begin.Length, native_text_begin, text_begin_byteCount);
-                native_text_begin[native_text_begin_offset] = 0;
-            }
-            byte* native_text_end = null;
-            float wrap_width = 0.0f;
-            Vector4* cpu_fine_clip_rect = null;
-            ImGuiNative.ImDrawList_AddTextFontPtr(NativePtr, native_font, font_size, pos, col, native_text_begin, native_text_end, wrap_width, cpu_fine_clip_rect);
-        }
-        public void AddText(ImFontPtr font, float font_size, Vector2 pos, uint col, string text_begin, string text_end)
-        {
-            ImFont* native_font = font.NativePtr;
-            int text_begin_byteCount = Encoding.UTF8.GetByteCount(text_begin);
-            byte* native_text_begin = stackalloc byte[text_begin_byteCount + 1];
-            fixed (char* text_begin_ptr = text_begin)
-            {
-                int native_text_begin_offset = Encoding.UTF8.GetBytes(text_begin_ptr, text_begin.Length, native_text_begin, text_begin_byteCount);
-                native_text_begin[native_text_begin_offset] = 0;
-            }
-            int text_end_byteCount = Encoding.UTF8.GetByteCount(text_end);
-            byte* native_text_end = stackalloc byte[text_end_byteCount + 1];
-            fixed (char* text_end_ptr = text_end)
-            {
-                int native_text_end_offset = Encoding.UTF8.GetBytes(text_end_ptr, text_end.Length, native_text_end, text_end_byteCount);
-                native_text_end[native_text_end_offset] = 0;
-            }
-            float wrap_width = 0.0f;
-            Vector4* cpu_fine_clip_rect = null;
-            ImGuiNative.ImDrawList_AddTextFontPtr(NativePtr, native_font, font_size, pos, col, native_text_begin, native_text_end, wrap_width, cpu_fine_clip_rect);
-        }
-        public void AddText(ImFontPtr font, float font_size, Vector2 pos, uint col, string text_begin, string text_end, float wrap_width)
-        {
-            ImFont* native_font = font.NativePtr;
-            int text_begin_byteCount = Encoding.UTF8.GetByteCount(text_begin);
-            byte* native_text_begin = stackalloc byte[text_begin_byteCount + 1];
-            fixed (char* text_begin_ptr = text_begin)
-            {
-                int native_text_begin_offset = Encoding.UTF8.GetBytes(text_begin_ptr, text_begin.Length, native_text_begin, text_begin_byteCount);
-                native_text_begin[native_text_begin_offset] = 0;
-            }
-            int text_end_byteCount = Encoding.UTF8.GetByteCount(text_end);
-            byte* native_text_end = stackalloc byte[text_end_byteCount + 1];
-            fixed (char* text_end_ptr = text_end)
-            {
-                int native_text_end_offset = Encoding.UTF8.GetBytes(text_end_ptr, text_end.Length, native_text_end, text_end_byteCount);
-                native_text_end[native_text_end_offset] = 0;
-            }
-            Vector4* cpu_fine_clip_rect = null;
-            ImGuiNative.ImDrawList_AddTextFontPtr(NativePtr, native_font, font_size, pos, col, native_text_begin, native_text_end, wrap_width, cpu_fine_clip_rect);
-        }
-        public void AddText(ImFontPtr font, float font_size, Vector2 pos, uint col, string text_begin, string text_end, float wrap_width, ref Vector4 cpu_fine_clip_rect)
-        {
-            ImFont* native_font = font.NativePtr;
-            int text_begin_byteCount = Encoding.UTF8.GetByteCount(text_begin);
-            byte* native_text_begin = stackalloc byte[text_begin_byteCount + 1];
-            fixed (char* text_begin_ptr = text_begin)
-            {
-                int native_text_begin_offset = Encoding.UTF8.GetBytes(text_begin_ptr, text_begin.Length, native_text_begin, text_begin_byteCount);
-                native_text_begin[native_text_begin_offset] = 0;
-            }
-            int text_end_byteCount = Encoding.UTF8.GetByteCount(text_end);
-            byte* native_text_end = stackalloc byte[text_end_byteCount + 1];
-            fixed (char* text_end_ptr = text_end)
-            {
-                int native_text_end_offset = Encoding.UTF8.GetBytes(text_end_ptr, text_end.Length, native_text_end, text_end_byteCount);
-                native_text_end[native_text_end_offset] = 0;
-            }
-            Vector4 native_cpu_fine_clip_rect_val = cpu_fine_clip_rect;
-            Vector4* native_cpu_fine_clip_rect = &native_cpu_fine_clip_rect_val;
-            ImGuiNative.ImDrawList_AddTextFontPtr(NativePtr, native_font, font_size, pos, col, native_text_begin, native_text_end, wrap_width, native_cpu_fine_clip_rect);
-            cpu_fine_clip_rect = native_cpu_fine_clip_rect_val;
         }
         public void AddCircleFilled(Vector2 centre, float radius, uint col)
         {

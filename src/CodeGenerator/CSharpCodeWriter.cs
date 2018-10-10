@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
-namespace CodeGenerator {
+namespace CodeGenerator
+{
     class CSharpCodeWriter : IDisposable
     {
         private readonly StreamWriter _sw;

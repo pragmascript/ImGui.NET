@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace CodeGenerator {
@@ -556,10 +557,15 @@ namespace CodeGenerator {
         private static void EmitOverload(
             CSharpCodeWriter writer,
             OverloadDefinition overload,
-            Dictionary<string, string>
-            defaultValues,
+            Dictionary<string, string> defaultValues,
             string selfName)
         {
+            if (overload.Parameters.Where(tr => tr.Name.EndsWith("_begin") || tr.Name.EndsWith("_end"))
+                .Any(tr => !defaultValues.ContainsKey(tr.Name)))
+            {
+                return;
+            }
+
             Debug.Assert(!overload.IsMemberFunction || selfName != null);
 
             string nativeRet = GetTypeString(overload.ReturnType, false);
@@ -713,17 +719,8 @@ namespace CodeGenerator {
                     string nativeArgName = "native_" + tr.Name;
                     bool isOutParam = tr.Name.Contains("out_");
                     string direction = isOutParam ? "out" : "ref";
-                    marshalledParameters[i] = new MarshalledParameter($"{direction} {nonPtrType}", false, nativeArgName, false);
-                    if (isOutParam)
-                    {
-                        preCallLines.Add($"{nonPtrType} {nativeArgName}_val;");
-                    }
-                    else
-                    {
-                        preCallLines.Add($"{nonPtrType} {nativeArgName}_val = {correctedIdentifier};");
-                    }
-                    preCallLines.Add($"{nonPtrType}* {nativeArgName} = &{nativeArgName}_val;");
-                    postCallLines.Add($"{correctedIdentifier} = {nativeArgName}_val;");
+                    marshalledParameters[i] = new MarshalledParameter($"{direction} {nonPtrType}", true, nativeArgName, false);
+                    marshalledParameters[i].PinTarget = CorrectIdentifier(tr.Name);
                 }
                 else
                 {
@@ -761,7 +758,7 @@ namespace CodeGenerator {
                 if (mp.IsPinned)
                 {
                     string nativePinType = GetTypeString(tr.Type, false);
-                    writer.PushBlock($"fixed ({nativePinType} native_{tr.Name} = native_{tr.Name}_topin)");
+                    writer.PushBlock($"fixed ({nativePinType} native_{tr.Name} = &{mp.PinTarget})");
                 }
 
                 nativeInvocationArgs.Add(mp.VarName);
@@ -777,16 +774,6 @@ namespace CodeGenerator {
             }
 
             writer.WriteLine($"{ret}ImGuiNative.{targetName}({nativeInvocationStr});");
-
-            for (int i = 0; i < marshalledParameters.Length; i++)
-            {
-                MarshalledParameter mp = marshalledParameters[i];
-                if (mp == null) { continue; }
-                if (mp.IsPinned)
-                {
-                    writer.PopBlock();
-                }
-            }
 
             foreach (string line in postCallLines)
             {
@@ -811,6 +798,16 @@ namespace CodeGenerator {
                 {
                     string retVal = isWrappedType ? $"new {safeRet}(ret)" : "ret";
                     writer.WriteLine($"return {retVal};");
+                }
+            }
+
+            for (int i = 0; i < marshalledParameters.Length; i++)
+            {
+                MarshalledParameter mp = marshalledParameters[i];
+                if (mp == null) { continue; }
+                if (mp.IsPinned)
+                {
+                    writer.PopBlock();
                 }
             }
 
@@ -1124,5 +1121,6 @@ namespace CodeGenerator {
         public bool IsPinned { get; }
         public string VarName { get; }
         public bool HasDefaultValue { get; }
+        public string PinTarget { get; internal set; }
     }
 }
