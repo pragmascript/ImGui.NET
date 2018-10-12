@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>A .NET wrapper for the Dear ImGui library.</Description>
+    <AssemblyVersion>1.65.0</AssemblyVersion>
+    <Authors>Eric Mellino</Authors>
+<<<<<<< HEAD
+    <TargetFramework>net462</TargetFramework>
+=======
+    <TargetFramework>netstandard2.0</TargetFramework>
+>>>>>>> 068f45ba3e41e21c1ff84e3e0c7bf048a55f5511
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>portable</DebugType>
+    <AssemblyName>ImGui.NET</AssemblyName>
+    <PackageId>ImGui.NET</PackageId>
+    <PackagePrereleaseIdentifier>-beta0</PackagePrereleaseIdentifier>
+    <PackageVersion>$(AssemblyVersion)$(PackagePrereleaseIdentifier)</PackageVersion>
+    <PackageTags>ImGui ImGui.NET Immediate Mode GUI</PackageTags>
+<<<<<<< HEAD
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+=======
+>>>>>>> 068f45ba3e41e21c1ff84e3e0c7bf048a55f5511
+    <PackageProjectUrl>https://github.com/mellinoe/imgui.net</PackageProjectUrl>
+    <DocumentationFile Condition="'$(Configuration)' == 'Release'">$(OutputPath)\ImGui.NET.xml</DocumentationFile>
+    <RootNamespace>ImGuiNET</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.2" />
+    <PackageReference Include="System.Buffers" Version="4.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Generated\" />
+  </ItemGroup>
+</Project>

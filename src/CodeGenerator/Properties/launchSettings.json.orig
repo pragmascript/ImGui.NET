@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "CodeGenerator": {
+      "commandName": "Project",
+<<<<<<< HEAD
+      "commandLineArgs": "E:\\Projects\\dotnet\\ImGui.NET\\src\\ImGui.NET\\Generated"
+    }
+  }
+}
+=======
+      "commandLineArgs": "E:\\projects\\imgui.net\\src\\ImGui.NET\\Generated"
+    }
+  }
+}
+>>>>>>> 068f45ba3e41e21c1ff84e3e0c7bf048a55f5511
