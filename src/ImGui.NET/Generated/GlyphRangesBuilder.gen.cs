@@ -18,27 +18,40 @@ namespace ImGuiNET
         public static implicit operator GlyphRangesBuilder* (GlyphRangesBuilderPtr wrappedPtr) { return wrappedPtr.NativePtr; }
         public static implicit operator GlyphRangesBuilderPtr(IntPtr nativePtr) { return new GlyphRangesBuilderPtr(nativePtr); }
         public ImVector<byte> UsedChars => new ImVector<byte>(NativePtr->UsedChars);
-        public void SetBit(int n)
+        public void AddChar(ushort c)
         {
-            ImGuiNative.GlyphRangesBuilder_SetBit(NativePtr, n);
+            ImGuiNative.GlyphRangesBuilder_AddChar(NativePtr, c);
+        }
+        public void AddRanges(IntPtr ranges)
+        {
+            ushort* native_ranges = (ushort*)ranges.ToPointer();
+            ImGuiNative.GlyphRangesBuilder_AddRanges(NativePtr, native_ranges);
         }
         public void AddText(string text)
         {
-            int text_byteCount = Encoding.UTF8.GetByteCount(text);
-            byte* native_text = stackalloc byte[text_byteCount + 1];
-            fixed (char* text_ptr = text)
+            byte* native_text;
+            int text_byteCount = 0;
+            if (text != null)
             {
-                int native_text_offset = Encoding.UTF8.GetBytes(text_ptr, text.Length, native_text, text_byteCount);
+                text_byteCount = Encoding.UTF8.GetByteCount(text);
+                if (text_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_text = Util.Allocate(text_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_text_stackBytes = stackalloc byte[text_byteCount + 1];
+                    native_text = native_text_stackBytes;
+                }
+                int native_text_offset = Util.GetUtf8(text, native_text, text_byteCount);
                 native_text[native_text_offset] = 0;
             }
+            else { native_text = null; }
             byte* native_text_end = null;
             ImGuiNative.GlyphRangesBuilder_AddText(NativePtr, native_text, native_text_end);
-        }
-        public void AddRanges(ref ushort ranges)
-        {
-            fixed (ushort* native_ranges = &ranges)
+            if (text_byteCount > Util.StackAllocationSizeLimit)
             {
-                ImGuiNative.GlyphRangesBuilder_AddRanges(NativePtr, native_ranges);
+                Util.Free(native_text);
             }
         }
         public void BuildRanges(out ImVector out_ranges)
@@ -53,9 +66,9 @@ namespace ImGuiNET
             byte ret = ImGuiNative.GlyphRangesBuilder_GetBit(NativePtr, n);
             return ret != 0;
         }
-        public void AddChar(ushort c)
+        public void SetBit(int n)
         {
-            ImGuiNative.GlyphRangesBuilder_AddChar(NativePtr, c);
+            ImGuiNative.GlyphRangesBuilder_SetBit(NativePtr, n);
         }
     }
 }

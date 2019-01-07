@@ -36,18 +36,18 @@ namespace ImGuiNET
         public static implicit operator ImFontConfigPtr(IntPtr nativePtr) { return new ImFontConfigPtr(nativePtr); }
         public IntPtr FontData { get { return (IntPtr)NativePtr->FontData; } set { NativePtr->FontData = (void*)value; } }
         public int* FontDataSize { get { return (int*) &NativePtr->FontDataSize; } }
-        public Bool8* FontDataOwnedByAtlas { get { return (Bool8*) &NativePtr->FontDataOwnedByAtlas; } }
+        public bool* FontDataOwnedByAtlas { get { return (bool*) &NativePtr->FontDataOwnedByAtlas; } }
         public int* FontNo { get { return (int*) &NativePtr->FontNo; } }
         public float* SizePixels { get { return (float*) &NativePtr->SizePixels; } }
         public int* OversampleH { get { return (int*) &NativePtr->OversampleH; } }
         public int* OversampleV { get { return (int*) &NativePtr->OversampleV; } }
-        public Bool8* PixelSnapH { get { return (Bool8*) &NativePtr->PixelSnapH; } }
+        public bool* PixelSnapH { get { return (bool*) &NativePtr->PixelSnapH; } }
         public Vector2* GlyphExtraSpacing { get { return (Vector2*) &NativePtr->GlyphExtraSpacing; } }
         public Vector2* GlyphOffset { get { return (Vector2*) &NativePtr->GlyphOffset; } }
         public IntPtr GlyphRanges { get { return (IntPtr)NativePtr->GlyphRanges; } set { NativePtr->GlyphRanges = (ushort*)value; } }
         public float* GlyphMinAdvanceX { get { return (float*) &NativePtr->GlyphMinAdvanceX; } }
         public float* GlyphMaxAdvanceX { get { return (float*) &NativePtr->GlyphMaxAdvanceX; } }
-        public Bool8* MergeMode { get { return (Bool8*) &NativePtr->MergeMode; } }
+        public bool* MergeMode { get { return (bool*) &NativePtr->MergeMode; } }
         public uint* RasterizerFlags { get { return (uint*) &NativePtr->RasterizerFlags; } }
         public float* RasterizerMultiply { get { return (float*) &NativePtr->RasterizerMultiply; } }
         public RangeAccessor<byte> Name => new RangeAccessor<byte>(NativePtr->Name, 40);

@@ -50,7 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bool8.cs" />
     <Compile Include="Generated\CustomRect.gen.cs" />
     <Compile Include="Generated\GlyphRangesBuilder.gen.cs" />
     <Compile Include="Generated\ImColor.gen.cs" />

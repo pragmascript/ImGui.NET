@@ -36,7 +36,7 @@ namespace ImGuiNET
         public IntPtr Buf { get { return (IntPtr)NativePtr->Buf; } set { NativePtr->Buf = (byte*)value; } }
         public int* BufTextLen { get { return (int*) &NativePtr->BufTextLen; } }
         public int* BufSize { get { return (int*) &NativePtr->BufSize; } }
-        public Bool8* BufDirty { get { return (Bool8*) &NativePtr->BufDirty; } }
+        public bool* BufDirty { get { return (bool*) &NativePtr->BufDirty; } }
         public int* CursorPos { get { return (int*) &NativePtr->CursorPos; } }
         public int* SelectionStart { get { return (int*) &NativePtr->SelectionStart; } }
         public int* SelectionEnd { get { return (int*) &NativePtr->SelectionEnd; } }
@@ -51,15 +51,30 @@ namespace ImGuiNET
         }
         public void InsertChars(int pos, string text)
         {
-            int text_byteCount = Encoding.UTF8.GetByteCount(text);
-            byte* native_text = stackalloc byte[text_byteCount + 1];
-            fixed (char* text_ptr = text)
+            byte* native_text;
+            int text_byteCount = 0;
+            if (text != null)
             {
-                int native_text_offset = Encoding.UTF8.GetBytes(text_ptr, text.Length, native_text, text_byteCount);
+                text_byteCount = Encoding.UTF8.GetByteCount(text);
+                if (text_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_text = Util.Allocate(text_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_text_stackBytes = stackalloc byte[text_byteCount + 1];
+                    native_text = native_text_stackBytes;
+                }
+                int native_text_offset = Util.GetUtf8(text, native_text, text_byteCount);
                 native_text[native_text_offset] = 0;
             }
+            else { native_text = null; }
             byte* native_text_end = null;
             ImGuiNative.ImGuiInputTextCallbackData_InsertChars(NativePtr, pos, native_text, native_text_end);
+            if (text_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_text);
+            }
         }
     }
 }

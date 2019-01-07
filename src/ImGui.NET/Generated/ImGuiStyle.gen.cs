@@ -114,8 +114,8 @@ namespace ImGuiNET
         public Vector2* DisplayWindowPadding { get { return (Vector2*) &NativePtr->DisplayWindowPadding; } }
         public Vector2* DisplaySafeAreaPadding { get { return (Vector2*) &NativePtr->DisplaySafeAreaPadding; } }
         public float* MouseCursorScale { get { return (float*) &NativePtr->MouseCursorScale; } }
-        public Bool8* AntiAliasedLines { get { return (Bool8*) &NativePtr->AntiAliasedLines; } }
-        public Bool8* AntiAliasedFill { get { return (Bool8*) &NativePtr->AntiAliasedFill; } }
+        public bool* AntiAliasedLines { get { return (bool*) &NativePtr->AntiAliasedLines; } }
+        public bool* AntiAliasedFill { get { return (bool*) &NativePtr->AntiAliasedFill; } }
         public float* CurveTessellationTol { get { return (float*) &NativePtr->CurveTessellationTol; } }
         public RangeAccessor<Vector4> Colors => new RangeAccessor<Vector4>(&NativePtr->Colors_0, 43);
         public void ScaleAllSizes(float scale_factor)

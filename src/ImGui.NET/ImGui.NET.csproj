@@ -1,14 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+<<<<<<< HEAD
     <Description>A .NET wrapper for the dear ImGui library.</Description>
     <AssemblyVersion>0.4.7</AssemblyVersion>
+=======
+    <Description>A .NET wrapper for the Dear ImGui library.</Description>
+    <AssemblyVersion>1.66.0</AssemblyVersion>
+>>>>>>> upstream/master
     <Authors>Eric Mellino</Authors>
     <TargetFramework>net462</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>portable</DebugType>
     <AssemblyName>ImGui.NET</AssemblyName>
     <PackageId>ImGui.NET</PackageId>
-    <PackagePrereleaseIdentifier>-beta1</PackagePrereleaseIdentifier>
+    <PackagePrereleaseIdentifier></PackagePrereleaseIdentifier>
     <PackageVersion>$(AssemblyVersion)$(PackagePrereleaseIdentifier)</PackageVersion>
     <PackageTags>ImGui ImGui.NET Immediate Mode GUI</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>

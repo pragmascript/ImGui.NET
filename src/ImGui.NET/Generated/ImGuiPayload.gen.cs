@@ -30,32 +30,47 @@ namespace ImGuiNET
         public uint* SourceParentId { get { return (uint*) &NativePtr->SourceParentId; } }
         public int* DataFrameCount { get { return (int*) &NativePtr->DataFrameCount; } }
         public RangeAccessor<byte> DataType => new RangeAccessor<byte>(NativePtr->DataType, 33);
-        public Bool8* Preview { get { return (Bool8*) &NativePtr->Preview; } }
-        public Bool8* Delivery { get { return (Bool8*) &NativePtr->Delivery; } }
+        public bool* Preview { get { return (bool*) &NativePtr->Preview; } }
+        public bool* Delivery { get { return (bool*) &NativePtr->Delivery; } }
         public void Clear()
         {
             ImGuiNative.ImGuiPayload_Clear(NativePtr);
         }
-        public bool IsPreview()
-        {
-            byte ret = ImGuiNative.ImGuiPayload_IsPreview(NativePtr);
-            return ret != 0;
-        }
         public bool IsDataType(string type)
         {
-            int type_byteCount = Encoding.UTF8.GetByteCount(type);
-            byte* native_type = stackalloc byte[type_byteCount + 1];
-            fixed (char* type_ptr = type)
+            byte* native_type;
+            int type_byteCount = 0;
+            if (type != null)
             {
-                int native_type_offset = Encoding.UTF8.GetBytes(type_ptr, type.Length, native_type, type_byteCount);
+                type_byteCount = Encoding.UTF8.GetByteCount(type);
+                if (type_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_type = Util.Allocate(type_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_type_stackBytes = stackalloc byte[type_byteCount + 1];
+                    native_type = native_type_stackBytes;
+                }
+                int native_type_offset = Util.GetUtf8(type, native_type, type_byteCount);
                 native_type[native_type_offset] = 0;
             }
+            else { native_type = null; }
             byte ret = ImGuiNative.ImGuiPayload_IsDataType(NativePtr, native_type);
+            if (type_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_type);
+            }
             return ret != 0;
         }
         public bool IsDelivery()
         {
             byte ret = ImGuiNative.ImGuiPayload_IsDelivery(NativePtr);
+            return ret != 0;
+        }
+        public bool IsPreview()
+        {
+            byte ret = ImGuiNative.ImGuiPayload_IsPreview(NativePtr);
             return ret != 0;
         }
     }

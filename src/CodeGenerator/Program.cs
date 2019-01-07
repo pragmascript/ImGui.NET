@@ -14,7 +14,6 @@ namespace CodeGenerator
     {
         private static readonly Dictionary<string, string> s_wellKnownTypes = new Dictionary<string, string>()
         {
-            // { "bool", "Bool8" },
             { "bool", "byte" },
             { "unsigned char", "byte" },
             { "char", "byte" },
@@ -45,16 +44,11 @@ namespace CodeGenerator
             { "float&", "float*" },
             { "ImVec2[2]", "Vector2*" },
             { "char* []", "byte**" },
-
-            // TODO: These shouldn't exist
-            { "ImVector_ImWchar", "ImVector" },
-            { "ImVector_TextRange", "ImVector" },
-            { "ImVector_TextRange&", "ImVector*" },
         };
 
         private static readonly Dictionary<string, string> s_wellKnownFieldReplacements = new Dictionary<string, string>()
         {
-            { "bool", "Bool8" },
+            { "bool", "bool" }, // Force bool to remain as bool in type-safe wrappers.
         };
 
         private static readonly HashSet<string> s_customDefinedTypes = new HashSet<string>()
@@ -102,6 +96,12 @@ namespace CodeGenerator
             "double",
         };
 
+        private static readonly HashSet<string> s_skippedFunctions = new HashSet<string>()
+        {
+            "igInputText",
+            "igInputTextMultiline"
+        };
+
         static void Main(string[] args)
         {
             string outputPath;
@@ -146,12 +146,14 @@ namespace CodeGenerator
                 string name = jp.Name;
                 TypeReference[] fields = jp.Values().Select(v =>
                 {
+                    if (v["type"].ToString().Contains("static")) { return null; }
+
                     return new TypeReference(
                         v["name"].ToString(),
                         v["type"].ToString(),
                         v["template_type"]?.ToString(),
                         enums);
-                }).ToArray();
+                }).Where(tr => tr != null).ToArray();
                 return new TypeDefinition(name, fields);
             }).ToArray();
 
@@ -159,18 +161,14 @@ namespace CodeGenerator
             {
                 JProperty jp = (JProperty)jt;
                 string name = jp.Name;
-                if (name.Contains("GetMousePos"))
-                {
-
-                }
-
                 bool hasNonUdtVariants = jp.Values().Any(val => val["ov_cimguiname"]?.ToString().EndsWith("nonUDT") ?? false);
 
                 OverloadDefinition[] overloads = jp.Values().Select(val =>
                 {
                     string ov_cimguiname = val["ov_cimguiname"]?.ToString();
                     string cimguiname = val["cimguiname"].ToString();
-                    string friendlyName = val["funcname"].ToString();
+                    string friendlyName = val["funcname"]?.ToString();
+                    if (friendlyName == null) { return null; }
 
                     string exportedName = ov_cimguiname;
                     if (exportedName == null)
@@ -191,10 +189,6 @@ namespace CodeGenerator
                     }
 
                     List<TypeReference> parameters = new List<TypeReference>();
-                    if (selfTypeName != null)
-                    {
-                        parameters.Add(new TypeReference("self", selfTypeName + "*", enums));
-                    }
 
                     foreach (JToken p in val["argsT"])
                     {
@@ -226,7 +220,7 @@ namespace CodeGenerator
                 }).Where(od => od != null).ToArray();
 
                 return new FunctionDefinition(name, overloads);
-            }).ToArray();
+            }).OrderBy(fd => fd.Name).ToArray();
 
             foreach (EnumDefinition ed in enums)
             {
@@ -495,6 +489,8 @@ namespace CodeGenerator
                 writer.PushBlock("public static unsafe partial class ImGui");
                 foreach (FunctionDefinition fd in functions)
                 {
+                    if (s_skippedFunctions.Contains(fd.Name)) { continue; }
+
                     foreach (OverloadDefinition overload in fd.Overloads)
                     {
                         string exportedName = overload.ExportedName;
@@ -629,13 +625,36 @@ namespace CodeGenerator
                     }
                     else
                     {
-                        preCallLines.Add($"int {correctedIdentifier}_byteCount = Encoding.UTF8.GetByteCount({textToEncode});");
-                        preCallLines.Add($"byte* {nativeArgName} = stackalloc byte[{correctedIdentifier}_byteCount + 1];");
-                        preCallLines.Add($"fixed (char* {correctedIdentifier}_ptr = {textToEncode})");
-                        preCallLines.Add("{");
-                        preCallLines.Add($"    int {nativeArgName}_offset = Encoding.UTF8.GetBytes({correctedIdentifier}_ptr, {textToEncode}.Length, {nativeArgName}, {correctedIdentifier}_byteCount);");
+                        preCallLines.Add($"byte* {nativeArgName};");
+                        preCallLines.Add($"int {correctedIdentifier}_byteCount = 0;");
+                        if (!hasDefault)
+                        {
+                            preCallLines.Add($"if ({textToEncode} != null)");
+                            preCallLines.Add("{");
+                        }
+                        preCallLines.Add($"    {correctedIdentifier}_byteCount = Encoding.UTF8.GetByteCount({textToEncode});");
+                        preCallLines.Add($"    if ({correctedIdentifier}_byteCount > Util.StackAllocationSizeLimit)");
+                        preCallLines.Add($"    {{");
+                        preCallLines.Add($"        {nativeArgName} = Util.Allocate({correctedIdentifier}_byteCount + 1);");
+                        preCallLines.Add($"    }}");
+                        preCallLines.Add($"    else");
+                        preCallLines.Add($"    {{");
+                        preCallLines.Add($"        byte* {nativeArgName}_stackBytes = stackalloc byte[{correctedIdentifier}_byteCount + 1];");
+                        preCallLines.Add($"        {nativeArgName} = {nativeArgName}_stackBytes;");
+                        preCallLines.Add($"    }}");
+                        preCallLines.Add($"    int {nativeArgName}_offset = Util.GetUtf8({textToEncode}, {nativeArgName}, {correctedIdentifier}_byteCount);");
                         preCallLines.Add($"    {nativeArgName}[{nativeArgName}_offset] = 0;");
-                        preCallLines.Add("}");
+                        
+                        if (!hasDefault)
+                        {
+                            preCallLines.Add("}");
+                            preCallLines.Add($"else {{ {nativeArgName} = null; }}");
+                        }
+
+                        postCallLines.Add($"if ({correctedIdentifier}_byteCount > Util.StackAllocationSizeLimit)");
+                        postCallLines.Add($"{{");
+                        postCallLines.Add($"    Util.Free({nativeArgName});");
+                        postCallLines.Add($"}}");
                     }
                 }
                 else if (tr.Type == "char* []")
@@ -662,8 +681,8 @@ namespace CodeGenerator
                     preCallLines.Add($"    fixed (char* sPtr = s)");
                     preCallLines.Add("    {");
                     preCallLines.Add($"        offset += Encoding.UTF8.GetBytes(sPtr, s.Length, {nativeArgName}_data + offset, {correctedIdentifier}_byteCounts[i]);");
-                    preCallLines.Add($"        offset += 1;");
                     preCallLines.Add($"        {nativeArgName}_data[offset] = 0;");
+                    preCallLines.Add($"        offset += 1;");
                     preCallLines.Add("    }");
                     preCallLines.Add("}");
 
@@ -699,11 +718,12 @@ namespace CodeGenerator
                     preCallLines.Add($"byte* {nativeArgName} = &{nativeArgName}_val;");
                     postCallLines.Add($"{correctedIdentifier} = {nativeArgName}_val != 0;");
                 }
-                else if (tr.Type == "void*")
+                else if (tr.Type == "void*" || tr.Type == "ImWchar*")
                 {
+                    string nativePtrTypeName = tr.Type == "void*" ? "void*" : "ushort*";
                     string nativeArgName = "native_" + tr.Name;
                     marshalledParameters[i] = new MarshalledParameter("IntPtr", false, nativeArgName, false);
-                    preCallLines.Add($"void* {nativeArgName} = {correctedIdentifier}.ToPointer();");
+                    preCallLines.Add($"{nativePtrTypeName} {nativeArgName} = ({nativePtrTypeName}){correctedIdentifier}.ToPointer();");
                 }
                 else if (GetWrappedType(tr.Type, out wrappedParamType)
                     && !s_wellKnownTypes.ContainsKey(tr.Type)
@@ -727,7 +747,7 @@ namespace CodeGenerator
                         nonPtrType = GetTypeString(tr.Type.Substring(0, tr.Type.Length - 1), false);
                     }
                     string nativeArgName = "native_" + tr.Name;
-                    bool isOutParam = tr.Name.Contains("out_");
+                    bool isOutParam = tr.Name.Contains("out_") || tr.Name == "out";
                     string direction = isOutParam ? "out" : "ref";
                     marshalledParameters[i] = new MarshalledParameter($"{direction} {nonPtrType}", true, nativeArgName, false);
                     marshalledParameters[i].PinTarget = CorrectIdentifier(tr.Name);
@@ -800,6 +820,10 @@ namespace CodeGenerator
                 {
                     writer.WriteLine("return Util.StringFromPtr(ret);");
                 }
+                else if (overload.ReturnType == "ImWchar*")
+                {
+                    writer.WriteLine("return (IntPtr)ret;");
+                }
                 else if (overload.ReturnType == "void*")
                 {
                     writer.WriteLine("return (IntPtr)ret;");
@@ -834,7 +858,7 @@ namespace CodeGenerator
             {
                 return "string";
             }
-            else if (nativeRet == "void*")
+            else if (nativeRet == "ImWchar*" || nativeRet == "void*")
             {
                 return "IntPtr";
             }
@@ -849,7 +873,7 @@ namespace CodeGenerator
 
         private static bool GetWrappedType(string nativeType, out string wrappedType)
         {
-            if (nativeType.StartsWith("Im") && nativeType.EndsWith("*"))
+            if (nativeType.StartsWith("Im") && nativeType.EndsWith("*") && !nativeType.StartsWith("ImVector"))
             {
                 int pointerLevel = nativeType.Length - nativeType.IndexOf('*');
                 if (pointerLevel > 1)
@@ -1029,6 +1053,20 @@ namespace CodeGenerator
         {
             Name = name;
             Type = type.Replace("const", string.Empty).Trim();
+
+
+            if (Type.StartsWith("ImVector_"))
+            {
+                if (Type.EndsWith("*"))
+                {
+                    Type = "ImVector*";
+                }
+                else
+                {
+                    Type = "ImVector";
+                }
+            }
+
             TemplateType = templateType;
             int startBracket = name.IndexOf('[');
             if (startBracket != -1)

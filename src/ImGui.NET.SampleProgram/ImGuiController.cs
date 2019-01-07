@@ -328,19 +328,38 @@ namespace ImGuiNET
 
         private void UpdateImGuiInput(InputSnapshot snapshot)
         {
-            var io = ImGui.GetIO();
+            ImGuiIOPtr io = ImGui.GetIO();
 
             Vector2 mousePosition = snapshot.MousePosition;
 
+            // Determine if any of the mouse buttons were pressed during this snapshot period, even if they are no longer held.
+            bool leftPressed = false;
+            bool middlePressed = false;
+            bool rightPressed = false;
+            foreach (MouseEvent me in snapshot.MouseEvents)
+            {
+                if (me.Down)
+                {
+                    switch (me.MouseButton)
+                    {
+                        case MouseButton.Left:
+                            leftPressed = true;
+                            break;
+                        case MouseButton.Middle:
+                            middlePressed = true;
+                            break;
+                        case MouseButton.Right:
+                            rightPressed = true;
+                            break;
+                    }
+                }
+            }
+
+            io.MouseDown[0] = leftPressed || snapshot.IsMouseDown(MouseButton.Left);
+            io.MouseDown[1] = rightPressed || snapshot.IsMouseDown(MouseButton.Right);
+            io.MouseDown[2] = middlePressed || snapshot.IsMouseDown(MouseButton.Middle);
             io.MousePos = mousePosition;
-            io.MouseDown[0] = snapshot.IsMouseDown(MouseButton.Left);
-            io.MouseDown[1] = snapshot.IsMouseDown(MouseButton.Right);
-            io.MouseDown[2] = snapshot.IsMouseDown(MouseButton.Middle);
-
-            float delta = snapshot.WheelDelta;
-            io.MouseWheel = delta;
-
-            io.MouseWheel = delta;
+            io.MouseWheel = snapshot.WheelDelta;
 
             IReadOnlyList<char> keyCharPresses = snapshot.KeyCharPresses;
             for (int i = 0; i < keyCharPresses.Count; i++)
