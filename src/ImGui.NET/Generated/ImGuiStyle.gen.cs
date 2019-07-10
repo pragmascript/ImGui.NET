@@ -13,6 +13,7 @@ namespace ImGuiNET
         public float WindowBorderSize;
         public Vector2 WindowMinSize;
         public Vector2 WindowTitleAlign;
+        public ImGuiDir WindowMenuButtonPosition;
         public float ChildRounding;
         public float ChildBorderSize;
         public float PopupRounding;
@@ -102,6 +103,7 @@ namespace ImGuiNET
         public float* WindowBorderSize { get { return (float*) &NativePtr->WindowBorderSize; } }
         public Vector2* WindowMinSize { get { return (Vector2*) &NativePtr->WindowMinSize; } }
         public Vector2* WindowTitleAlign { get { return (Vector2*) &NativePtr->WindowTitleAlign; } }
+        public ImGuiDir* WindowMenuButtonPosition { get { return (ImGuiDir*) &NativePtr->WindowMenuButtonPosition; } }
         public float* ChildRounding { get { return (float*) &NativePtr->ChildRounding; } }
         public float* ChildBorderSize { get { return (float*) &NativePtr->ChildBorderSize; } }
         public float* PopupRounding { get { return (float*) &NativePtr->PopupRounding; } }

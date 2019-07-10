@@ -58,6 +58,7 @@
     <Compile Include="Generated\ImDrawData.gen.cs" />
     <Compile Include="Generated\ImDrawList.gen.cs" />
     <Compile Include="Generated\ImDrawListFlags.gen.cs" />
+    <Compile Include="Generated\ImDrawListSplitter.gen.cs" />
     <Compile Include="Generated\ImDrawVert.gen.cs" />
     <Compile Include="Generated\ImFont.gen.cs" />
     <Compile Include="Generated\ImFontAtlas.gen.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Generated\ImGuiWindowFlags.gen.cs" />
     <Compile Include="Generated\TextRange.gen.cs" />
     <Compile Include="ImDrawData.Manual.cs" />
+    <Compile Include="ImDrawList.Manual.cs" />
     <Compile Include="ImGui.Manual.cs" />
     <Compile Include="ImGuiSizeCallback.cs" />
     <Compile Include="ImGuiTextEditCallback.cs" />

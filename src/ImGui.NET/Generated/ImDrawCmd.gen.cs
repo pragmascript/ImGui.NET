@@ -10,6 +10,8 @@ namespace ImGuiNET
         public uint ElemCount;
         public Vector4 ClipRect;
         public IntPtr TextureId;
+        public uint VtxOffset;
+        public uint IdxOffset;
         public IntPtr UserCallback;
         public void* UserCallbackData;
     }
@@ -24,6 +26,8 @@ namespace ImGuiNET
         public uint* ElemCount { get { return (uint*) &NativePtr->ElemCount; } }
         public Vector4* ClipRect { get { return (Vector4*) &NativePtr->ClipRect; } }
         public IntPtr* TextureId { get { return (IntPtr*) &NativePtr->TextureId; } }
+        public uint* VtxOffset { get { return (uint*) &NativePtr->VtxOffset; } }
+        public uint* IdxOffset { get { return (uint*) &NativePtr->IdxOffset; } }
         public IntPtr* UserCallback { get { return (IntPtr*) &NativePtr->UserCallback; } }
         public IntPtr UserCallbackData { get { return (IntPtr)NativePtr->UserCallbackData; } set { NativePtr->UserCallbackData = (void*)value; } }
         public void Destroy()
