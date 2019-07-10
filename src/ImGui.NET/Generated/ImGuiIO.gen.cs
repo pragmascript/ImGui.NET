@@ -26,12 +26,16 @@ namespace ImGuiNET
         public byte FontAllowUserScaling;
         public ImFont* FontDefault;
         public Vector2 DisplayFramebufferScale;
-        public Vector2 DisplayVisibleMin;
-        public Vector2 DisplayVisibleMax;
         public byte MouseDrawCursor;
         public byte ConfigMacOSXBehaviors;
         public byte ConfigInputTextCursorBlink;
-        public byte ConfigResizeWindowsFromEdges;
+        public byte ConfigWindowsResizeFromEdges;
+        public byte ConfigWindowsMoveFromTitleBarOnly;
+        public byte* BackendPlatformName;
+        public byte* BackendRendererName;
+        public void* BackendPlatformUserData;
+        public void* BackendRendererUserData;
+        public void* BackendLanguageUserData;
         public IntPtr GetClipboardTextFn;
         public IntPtr SetClipboardTextFn;
         public void* ClipboardUserData;
@@ -47,8 +51,7 @@ namespace ImGuiNET
         public byte KeyAlt;
         public byte KeySuper;
         public fixed byte KeysDown[512];
-        public fixed ushort InputCharacters[17];
-        public fixed float NavInputs[21];
+        public fixed float NavInputs[22];
         public byte WantCaptureMouse;
         public byte WantCaptureKeyboard;
         public byte WantTextInput;
@@ -74,6 +77,7 @@ namespace ImGuiNET
         public fixed byte MouseDoubleClicked[5];
         public fixed byte MouseReleased[5];
         public fixed byte MouseDownOwned[5];
+        public fixed byte MouseDownWasDoubleClick[5];
         public fixed float MouseDownDuration[5];
         public fixed float MouseDownDurationPrev[5];
         public Vector2 MouseDragMaxDistanceAbs_0;
@@ -84,8 +88,9 @@ namespace ImGuiNET
         public fixed float MouseDragMaxDistanceSqr[5];
         public fixed float KeysDownDuration[512];
         public fixed float KeysDownDurationPrev[512];
-        public fixed float NavInputsDownDuration[21];
-        public fixed float NavInputsDownDurationPrev[21];
+        public fixed float NavInputsDownDuration[22];
+        public fixed float NavInputsDownDurationPrev[22];
+        public ImVector InputQueueCharacters;
     }
     public unsafe partial struct ImGuiIOPtr
     {
@@ -114,12 +119,16 @@ namespace ImGuiNET
         public bool* FontAllowUserScaling { get { return (bool*) &NativePtr->FontAllowUserScaling; } }
         public ImFontPtr FontDefault => new ImFontPtr(NativePtr->FontDefault);
         public Vector2* DisplayFramebufferScale { get { return (Vector2*) &NativePtr->DisplayFramebufferScale; } }
-        public Vector2* DisplayVisibleMin { get { return (Vector2*) &NativePtr->DisplayVisibleMin; } }
-        public Vector2* DisplayVisibleMax { get { return (Vector2*) &NativePtr->DisplayVisibleMax; } }
         public bool* MouseDrawCursor { get { return (bool*) &NativePtr->MouseDrawCursor; } }
         public bool* ConfigMacOSXBehaviors { get { return (bool*) &NativePtr->ConfigMacOSXBehaviors; } }
         public bool* ConfigInputTextCursorBlink { get { return (bool*) &NativePtr->ConfigInputTextCursorBlink; } }
-        public bool* ConfigResizeWindowsFromEdges { get { return (bool*) &NativePtr->ConfigResizeWindowsFromEdges; } }
+        public bool* ConfigWindowsResizeFromEdges { get { return (bool*) &NativePtr->ConfigWindowsResizeFromEdges; } }
+        public bool* ConfigWindowsMoveFromTitleBarOnly { get { return (bool*) &NativePtr->ConfigWindowsMoveFromTitleBarOnly; } }
+        public NullTerminatedString BackendPlatformName => new NullTerminatedString(NativePtr->BackendPlatformName);
+        public NullTerminatedString BackendRendererName => new NullTerminatedString(NativePtr->BackendRendererName);
+        public IntPtr BackendPlatformUserData { get { return (IntPtr)NativePtr->BackendPlatformUserData; } set { NativePtr->BackendPlatformUserData = (void*)value; } }
+        public IntPtr BackendRendererUserData { get { return (IntPtr)NativePtr->BackendRendererUserData; } set { NativePtr->BackendRendererUserData = (void*)value; } }
+        public IntPtr BackendLanguageUserData { get { return (IntPtr)NativePtr->BackendLanguageUserData; } set { NativePtr->BackendLanguageUserData = (void*)value; } }
         public IntPtr* GetClipboardTextFn { get { return (IntPtr*) &NativePtr->GetClipboardTextFn; } }
         public IntPtr* SetClipboardTextFn { get { return (IntPtr*) &NativePtr->SetClipboardTextFn; } }
         public IntPtr ClipboardUserData { get { return (IntPtr)NativePtr->ClipboardUserData; } set { NativePtr->ClipboardUserData = (void*)value; } }
@@ -135,8 +144,7 @@ namespace ImGuiNET
         public bool* KeyAlt { get { return (bool*) &NativePtr->KeyAlt; } }
         public bool* KeySuper { get { return (bool*) &NativePtr->KeySuper; } }
         public RangeAccessor<bool> KeysDown => new RangeAccessor<bool>(NativePtr->KeysDown, 512);
-        public RangeAccessor<ushort> InputCharacters => new RangeAccessor<ushort>(NativePtr->InputCharacters, 17);
-        public RangeAccessor<float> NavInputs => new RangeAccessor<float>(NativePtr->NavInputs, 21);
+        public RangeAccessor<float> NavInputs => new RangeAccessor<float>(NativePtr->NavInputs, 22);
         public bool* WantCaptureMouse { get { return (bool*) &NativePtr->WantCaptureMouse; } }
         public bool* WantCaptureKeyboard { get { return (bool*) &NativePtr->WantCaptureKeyboard; } }
         public bool* WantTextInput { get { return (bool*) &NativePtr->WantTextInput; } }
@@ -158,47 +166,53 @@ namespace ImGuiNET
         public RangeAccessor<bool> MouseDoubleClicked => new RangeAccessor<bool>(NativePtr->MouseDoubleClicked, 5);
         public RangeAccessor<bool> MouseReleased => new RangeAccessor<bool>(NativePtr->MouseReleased, 5);
         public RangeAccessor<bool> MouseDownOwned => new RangeAccessor<bool>(NativePtr->MouseDownOwned, 5);
+        public RangeAccessor<bool> MouseDownWasDoubleClick => new RangeAccessor<bool>(NativePtr->MouseDownWasDoubleClick, 5);
         public RangeAccessor<float> MouseDownDuration => new RangeAccessor<float>(NativePtr->MouseDownDuration, 5);
         public RangeAccessor<float> MouseDownDurationPrev => new RangeAccessor<float>(NativePtr->MouseDownDurationPrev, 5);
         public RangeAccessor<Vector2> MouseDragMaxDistanceAbs => new RangeAccessor<Vector2>(&NativePtr->MouseDragMaxDistanceAbs_0, 5);
         public RangeAccessor<float> MouseDragMaxDistanceSqr => new RangeAccessor<float>(NativePtr->MouseDragMaxDistanceSqr, 5);
         public RangeAccessor<float> KeysDownDuration => new RangeAccessor<float>(NativePtr->KeysDownDuration, 512);
         public RangeAccessor<float> KeysDownDurationPrev => new RangeAccessor<float>(NativePtr->KeysDownDurationPrev, 512);
-        public RangeAccessor<float> NavInputsDownDuration => new RangeAccessor<float>(NativePtr->NavInputsDownDuration, 21);
-        public RangeAccessor<float> NavInputsDownDurationPrev => new RangeAccessor<float>(NativePtr->NavInputsDownDurationPrev, 21);
+        public RangeAccessor<float> NavInputsDownDuration => new RangeAccessor<float>(NativePtr->NavInputsDownDuration, 22);
+        public RangeAccessor<float> NavInputsDownDurationPrev => new RangeAccessor<float>(NativePtr->NavInputsDownDurationPrev, 22);
+        public ImVector<ushort> InputQueueCharacters => new ImVector<ushort>(NativePtr->InputQueueCharacters);
         public void AddInputCharacter(ushort c)
         {
             ImGuiNative.ImGuiIO_AddInputCharacter(NativePtr, c);
         }
-        public void AddInputCharactersUTF8(string utf8_chars)
+        public void AddInputCharactersUTF8(string str)
         {
-            byte* native_utf8_chars;
-            int utf8_chars_byteCount = 0;
-            if (utf8_chars != null)
+            byte* native_str;
+            int str_byteCount = 0;
+            if (str != null)
             {
-                utf8_chars_byteCount = Encoding.UTF8.GetByteCount(utf8_chars);
-                if (utf8_chars_byteCount > Util.StackAllocationSizeLimit)
+                str_byteCount = Encoding.UTF8.GetByteCount(str);
+                if (str_byteCount > Util.StackAllocationSizeLimit)
                 {
-                    native_utf8_chars = Util.Allocate(utf8_chars_byteCount + 1);
+                    native_str = Util.Allocate(str_byteCount + 1);
                 }
                 else
                 {
-                    byte* native_utf8_chars_stackBytes = stackalloc byte[utf8_chars_byteCount + 1];
-                    native_utf8_chars = native_utf8_chars_stackBytes;
+                    byte* native_str_stackBytes = stackalloc byte[str_byteCount + 1];
+                    native_str = native_str_stackBytes;
                 }
-                int native_utf8_chars_offset = Util.GetUtf8(utf8_chars, native_utf8_chars, utf8_chars_byteCount);
-                native_utf8_chars[native_utf8_chars_offset] = 0;
+                int native_str_offset = Util.GetUtf8(str, native_str, str_byteCount);
+                native_str[native_str_offset] = 0;
             }
-            else { native_utf8_chars = null; }
-            ImGuiNative.ImGuiIO_AddInputCharactersUTF8(NativePtr, native_utf8_chars);
-            if (utf8_chars_byteCount > Util.StackAllocationSizeLimit)
+            else { native_str = null; }
+            ImGuiNative.ImGuiIO_AddInputCharactersUTF8(NativePtr, native_str);
+            if (str_byteCount > Util.StackAllocationSizeLimit)
             {
-                Util.Free(native_utf8_chars);
+                Util.Free(native_str);
             }
         }
         public void ClearInputCharacters()
         {
             ImGuiNative.ImGuiIO_ClearInputCharacters(NativePtr);
+        }
+        public void Destroy()
+        {
+            ImGuiNative.ImGuiIO_destroy(NativePtr);
         }
     }
 }

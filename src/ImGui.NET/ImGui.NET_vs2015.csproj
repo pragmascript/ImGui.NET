@@ -51,7 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Generated\CustomRect.gen.cs" />
-    <Compile Include="Generated\GlyphRangesBuilder.gen.cs" />
     <Compile Include="Generated\ImColor.gen.cs" />
     <Compile Include="Generated\ImDrawChannel.gen.cs" />
     <Compile Include="Generated\ImDrawCmd.gen.cs" />
@@ -65,6 +64,7 @@
     <Compile Include="Generated\ImFontAtlasFlags.gen.cs" />
     <Compile Include="Generated\ImFontConfig.gen.cs" />
     <Compile Include="Generated\ImFontGlyph.gen.cs" />
+    <Compile Include="Generated\ImFontGlyphRangesBuilder.gen.cs" />
     <Compile Include="Generated\ImGui.gen.cs" />
     <Compile Include="Generated\ImGuiBackendFlags.gen.cs" />
     <Compile Include="Generated\ImGuiCol.gen.cs" />
@@ -92,6 +92,8 @@
     <Compile Include="Generated\ImGuiStorage.gen.cs" />
     <Compile Include="Generated\ImGuiStyle.gen.cs" />
     <Compile Include="Generated\ImGuiStyleVar.gen.cs" />
+    <Compile Include="Generated\ImGuiTabBarFlags.gen.cs" />
+    <Compile Include="Generated\ImGuiTabItemFlags.gen.cs" />
     <Compile Include="Generated\ImGuiTextBuffer.gen.cs" />
     <Compile Include="Generated\ImGuiTextFilter.gen.cs" />
     <Compile Include="Generated\ImGuiTreeNodeFlags.gen.cs" />

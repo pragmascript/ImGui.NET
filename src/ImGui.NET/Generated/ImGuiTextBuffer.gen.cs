@@ -18,6 +18,33 @@ namespace ImGuiNET
         public static implicit operator ImGuiTextBuffer* (ImGuiTextBufferPtr wrappedPtr) { return wrappedPtr.NativePtr; }
         public static implicit operator ImGuiTextBufferPtr(IntPtr nativePtr) { return new ImGuiTextBufferPtr(nativePtr); }
         public ImVector<byte> Buf => new ImVector<byte>(NativePtr->Buf);
+        public void append(string str)
+        {
+            byte* native_str;
+            int str_byteCount = 0;
+            if (str != null)
+            {
+                str_byteCount = Encoding.UTF8.GetByteCount(str);
+                if (str_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_str = Util.Allocate(str_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_str_stackBytes = stackalloc byte[str_byteCount + 1];
+                    native_str = native_str_stackBytes;
+                }
+                int native_str_offset = Util.GetUtf8(str, native_str, str_byteCount);
+                native_str[native_str_offset] = 0;
+            }
+            else { native_str = null; }
+            byte* native_str_end = null;
+            ImGuiNative.ImGuiTextBuffer_append(NativePtr, native_str, native_str_end);
+            if (str_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_str);
+            }
+        }
         public void appendf(string fmt)
         {
             byte* native_fmt;
@@ -57,6 +84,10 @@ namespace ImGuiNET
         public void clear()
         {
             ImGuiNative.ImGuiTextBuffer_clear(NativePtr);
+        }
+        public void Destroy()
+        {
+            ImGuiNative.ImGuiTextBuffer_destroy(NativePtr);
         }
         public bool empty()
         {

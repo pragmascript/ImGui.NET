@@ -18,6 +18,10 @@ namespace ImGuiNET
         public static implicit operator ImColor* (ImColorPtr wrappedPtr) { return wrappedPtr.NativePtr; }
         public static implicit operator ImColorPtr(IntPtr nativePtr) { return new ImColorPtr(nativePtr); }
         public Vector4* Value { get { return (Vector4*) &NativePtr->Value; } }
+        public void Destroy()
+        {
+            ImGuiNative.ImColor_destroy(NativePtr);
+        }
         public ImColor HSV(float h, float s, float v)
         {
             float a = 1.0f;

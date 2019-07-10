@@ -7,22 +7,22 @@ namespace ImGuiNET
 {
     public unsafe partial struct ImFont
     {
-        public float FontSize;
-        public float Scale;
-        public Vector2 DisplayOffset;
-        public ImVector Glyphs;
         public ImVector IndexAdvanceX;
-        public ImVector IndexLookup;
-        public ImFontGlyph* FallbackGlyph;
         public float FallbackAdvanceX;
-        public ushort FallbackChar;
-        public short ConfigDataCount;
-        public ImFontConfig* ConfigData;
+        public float FontSize;
+        public ImVector IndexLookup;
+        public ImVector Glyphs;
+        public ImFontGlyph* FallbackGlyph;
+        public Vector2 DisplayOffset;
         public ImFontAtlas* ContainerAtlas;
+        public ImFontConfig* ConfigData;
+        public short ConfigDataCount;
+        public ushort FallbackChar;
+        public float Scale;
         public float Ascent;
         public float Descent;
-        public byte DirtyLookupTables;
         public int MetricsTotalSurface;
+        public byte DirtyLookupTables;
     }
     public unsafe partial struct ImFontPtr
     {
@@ -32,22 +32,22 @@ namespace ImGuiNET
         public static implicit operator ImFontPtr(ImFont* nativePtr) { return new ImFontPtr(nativePtr); }
         public static implicit operator ImFont* (ImFontPtr wrappedPtr) { return wrappedPtr.NativePtr; }
         public static implicit operator ImFontPtr(IntPtr nativePtr) { return new ImFontPtr(nativePtr); }
-        public float* FontSize { get { return (float*) &NativePtr->FontSize; } }
-        public float* Scale { get { return (float*) &NativePtr->Scale; } }
-        public Vector2* DisplayOffset { get { return (Vector2*) &NativePtr->DisplayOffset; } }
-        public ImPtrVector<ImFontGlyphPtr> Glyphs => new ImPtrVector<ImFontGlyphPtr>(NativePtr->Glyphs, Unsafe.SizeOf<ImFontGlyph>());
         public ImVector<float> IndexAdvanceX => new ImVector<float>(NativePtr->IndexAdvanceX);
-        public ImVector<ushort> IndexLookup => new ImVector<ushort>(NativePtr->IndexLookup);
-        public ImFontGlyphPtr FallbackGlyph => new ImFontGlyphPtr(NativePtr->FallbackGlyph);
         public float* FallbackAdvanceX { get { return (float*) &NativePtr->FallbackAdvanceX; } }
-        public ushort* FallbackChar { get { return (ushort*) &NativePtr->FallbackChar; } }
-        public short* ConfigDataCount { get { return (short*) &NativePtr->ConfigDataCount; } }
-        public ImFontConfigPtr ConfigData => new ImFontConfigPtr(NativePtr->ConfigData);
+        public float* FontSize { get { return (float*) &NativePtr->FontSize; } }
+        public ImVector<ushort> IndexLookup => new ImVector<ushort>(NativePtr->IndexLookup);
+        public ImPtrVector<ImFontGlyphPtr> Glyphs => new ImPtrVector<ImFontGlyphPtr>(NativePtr->Glyphs, Unsafe.SizeOf<ImFontGlyph>());
+        public ImFontGlyphPtr FallbackGlyph => new ImFontGlyphPtr(NativePtr->FallbackGlyph);
+        public Vector2* DisplayOffset { get { return (Vector2*) &NativePtr->DisplayOffset; } }
         public ImFontAtlasPtr ContainerAtlas => new ImFontAtlasPtr(NativePtr->ContainerAtlas);
+        public ImFontConfigPtr ConfigData => new ImFontConfigPtr(NativePtr->ConfigData);
+        public short* ConfigDataCount { get { return (short*) &NativePtr->ConfigDataCount; } }
+        public ushort* FallbackChar { get { return (ushort*) &NativePtr->FallbackChar; } }
+        public float* Scale { get { return (float*) &NativePtr->Scale; } }
         public float* Ascent { get { return (float*) &NativePtr->Ascent; } }
         public float* Descent { get { return (float*) &NativePtr->Descent; } }
-        public bool* DirtyLookupTables { get { return (bool*) &NativePtr->DirtyLookupTables; } }
         public int* MetricsTotalSurface { get { return (int*) &NativePtr->MetricsTotalSurface; } }
+        public bool* DirtyLookupTables { get { return (bool*) &NativePtr->DirtyLookupTables; } }
         public void AddGlyph(ushort c, float x0, float y0, float x1, float y1, float u0, float v0, float u1, float v1, float advance_x)
         {
             ImGuiNative.ImFont_AddGlyph(NativePtr, c, x0, y0, x1, y1, u0, v0, u1, v1, advance_x);
@@ -69,6 +69,10 @@ namespace ImGuiNET
         public void ClearOutputData()
         {
             ImGuiNative.ImFont_ClearOutputData(NativePtr);
+        }
+        public void Destroy()
+        {
+            ImGuiNative.ImFont_destroy(NativePtr);
         }
         public ImFontGlyphPtr FindGlyph(ushort c)
         {

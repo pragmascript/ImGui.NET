@@ -26,5 +26,9 @@ namespace ImGuiNET
         public IntPtr* TextureId { get { return (IntPtr*) &NativePtr->TextureId; } }
         public IntPtr* UserCallback { get { return (IntPtr*) &NativePtr->UserCallback; } }
         public IntPtr UserCallbackData { get { return (IntPtr)NativePtr->UserCallbackData; } set { NativePtr->UserCallbackData = (void*)value; } }
+        public void Destroy()
+        {
+            ImGuiNative.ImDrawCmd_destroy(NativePtr);
+        }
     }
 }

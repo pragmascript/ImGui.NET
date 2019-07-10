@@ -338,6 +338,10 @@ namespace ImGuiNET
         {
             ImGuiNative.ImFontAtlas_ClearTexData(NativePtr);
         }
+        public void Destroy()
+        {
+            ImGuiNative.ImFontAtlas_destroy(NativePtr);
+        }
         public CustomRect* GetCustomRectByIndex(int index)
         {
             CustomRect* ret = ImGuiNative.ImFontAtlas_GetCustomRectByIndex(NativePtr, index);
@@ -376,6 +380,11 @@ namespace ImGuiNET
         public IntPtr GetGlyphRangesThai()
         {
             ushort* ret = ImGuiNative.ImFontAtlas_GetGlyphRangesThai(NativePtr);
+            return (IntPtr)ret;
+        }
+        public IntPtr GetGlyphRangesVietnamese()
+        {
+            ushort* ret = ImGuiNative.ImFontAtlas_GetGlyphRangesVietnamese(NativePtr);
             return (IntPtr)ret;
         }
         public bool GetMouseCursorTexData(ImGuiMouseCursor cursor, out Vector2 out_offset, out Vector2 out_size, out Vector2 out_uv_border, out Vector2 out_uv_fill)

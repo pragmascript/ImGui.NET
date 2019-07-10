@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace CodeGenerator
 {
-    class Program
+    internal static class Program
     {
         private static readonly Dictionary<string, string> s_wellKnownTypes = new Dictionary<string, string>()
         {
@@ -72,6 +72,7 @@ namespace CodeGenerator
             { "ImVec4(1,1,1,1)", "new Vector4(1, 1, 1, 1)" },
             { "ImDrawCornerFlags_All", "(int)ImDrawCornerFlags.All" },
             { "FLT_MAX", "float.MaxValue" },
+            { "(((ImU32)(255)<<24)|((ImU32)(255)<<16)|((ImU32)(255)<<8)|((ImU32)(255)<<0))", "0xFFFFFFFF" }
         };
 
         private static readonly Dictionary<string, string> s_identifierReplacements = new Dictionary<string, string>()
@@ -168,6 +169,10 @@ namespace CodeGenerator
                     string ov_cimguiname = val["ov_cimguiname"]?.ToString();
                     string cimguiname = val["cimguiname"].ToString();
                     string friendlyName = val["funcname"]?.ToString();
+                    if (cimguiname.EndsWith("_destroy"))
+                    {
+                        friendlyName = "Destroy";
+                    }
                     if (friendlyName == null) { return null; }
 
                     string exportedName = ov_cimguiname;
@@ -207,6 +212,12 @@ namespace CodeGenerator
                     string comment = null;
 
                     string structName = val["stname"].ToString();
+                    bool isConstructor = val.Value<bool>("constructor");
+                    bool isDestructor = val.Value<bool>("destructor");
+                    if (isConstructor)
+                    {
+                        returnType = structName + "*";
+                    }
 
                     return new OverloadDefinition(
                         exportedName,
@@ -216,7 +227,8 @@ namespace CodeGenerator
                         returnType,
                         structName,
                         comment,
-                        enums);
+                        isConstructor,
+                        isDestructor);
                 }).Where(od => od != null).ToArray();
 
                 return new FunctionDefinition(name, overloads);
@@ -365,8 +377,10 @@ namespace CodeGenerator
                                 continue;
                             }
 
-                            if (overload.FriendlyName == overload.StructName)
+                            if (overload.IsConstructor)
                             {
+                                // TODO: Emit a static function on the type that invokes the native constructor.
+                                // Also, add a "Dispose" function or similar.
                                 continue;
                             }
 
@@ -427,6 +441,7 @@ namespace CodeGenerator
                     {
                         string exportedName = overload.ExportedName;
                         if (exportedName.Contains("~")) { continue; }
+                        if (exportedName.Contains("ImVector_")) { continue; }
                         if (overload.Parameters.Any(tr => tr.Type.Contains('('))) { continue; } // TODO: Parse function pointer parameters.
 
                         string ret = GetTypeString(overload.ReturnType, false);
@@ -534,6 +549,8 @@ namespace CodeGenerator
                 writer.PopBlock();
                 writer.PopBlock();
             }
+
+            Console.ReadLine();
         }
 
         private static bool IsStringFieldName(string name)
@@ -644,7 +661,7 @@ namespace CodeGenerator
                         preCallLines.Add($"    }}");
                         preCallLines.Add($"    int {nativeArgName}_offset = Util.GetUtf8({textToEncode}, {nativeArgName}, {correctedIdentifier}_byteCount);");
                         preCallLines.Add($"    {nativeArgName}[{nativeArgName}_offset] = 0;");
-                        
+
                         if (!hasDefault)
                         {
                             preCallLines.Add("}");
@@ -1138,6 +1155,8 @@ namespace CodeGenerator
         public string StructName { get; }
         public bool IsMemberFunction { get; }
         public string Comment { get; }
+        public bool IsConstructor { get; }
+        public bool IsDestructor { get; }
 
         public OverloadDefinition(
             string exportedName,
@@ -1147,7 +1166,8 @@ namespace CodeGenerator
             string returnType,
             string structName,
             string comment,
-            EnumDefinition[] enums)
+            bool isConstructor,
+            bool isDestructor)
         {
             ExportedName = exportedName;
             FriendlyName = friendlyName;
@@ -1155,8 +1175,10 @@ namespace CodeGenerator
             DefaultValues = defaultValues;
             ReturnType = returnType.Replace("const", string.Empty).Replace("inline", string.Empty).Trim();
             StructName = structName;
-            IsMemberFunction = structName != "ImGui";
+            IsMemberFunction = !string.IsNullOrEmpty(structName);
             Comment = comment;
+            IsConstructor = isConstructor;
+            IsDestructor = isDestructor;
         }
     }
 

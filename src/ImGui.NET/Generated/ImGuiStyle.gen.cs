@@ -29,7 +29,10 @@ namespace ImGuiNET
         public float ScrollbarRounding;
         public float GrabMinSize;
         public float GrabRounding;
+        public float TabRounding;
+        public float TabBorderSize;
         public Vector2 ButtonTextAlign;
+        public Vector2 SelectableTextAlign;
         public Vector2 DisplayWindowPadding;
         public Vector2 DisplaySafeAreaPadding;
         public float MouseCursorScale;
@@ -79,6 +82,11 @@ namespace ImGuiNET
         public Vector4 Colors_40;
         public Vector4 Colors_41;
         public Vector4 Colors_42;
+        public Vector4 Colors_43;
+        public Vector4 Colors_44;
+        public Vector4 Colors_45;
+        public Vector4 Colors_46;
+        public Vector4 Colors_47;
     }
     public unsafe partial struct ImGuiStylePtr
     {
@@ -110,14 +118,21 @@ namespace ImGuiNET
         public float* ScrollbarRounding { get { return (float*) &NativePtr->ScrollbarRounding; } }
         public float* GrabMinSize { get { return (float*) &NativePtr->GrabMinSize; } }
         public float* GrabRounding { get { return (float*) &NativePtr->GrabRounding; } }
+        public float* TabRounding { get { return (float*) &NativePtr->TabRounding; } }
+        public float* TabBorderSize { get { return (float*) &NativePtr->TabBorderSize; } }
         public Vector2* ButtonTextAlign { get { return (Vector2*) &NativePtr->ButtonTextAlign; } }
+        public Vector2* SelectableTextAlign { get { return (Vector2*) &NativePtr->SelectableTextAlign; } }
         public Vector2* DisplayWindowPadding { get { return (Vector2*) &NativePtr->DisplayWindowPadding; } }
         public Vector2* DisplaySafeAreaPadding { get { return (Vector2*) &NativePtr->DisplaySafeAreaPadding; } }
         public float* MouseCursorScale { get { return (float*) &NativePtr->MouseCursorScale; } }
         public bool* AntiAliasedLines { get { return (bool*) &NativePtr->AntiAliasedLines; } }
         public bool* AntiAliasedFill { get { return (bool*) &NativePtr->AntiAliasedFill; } }
         public float* CurveTessellationTol { get { return (float*) &NativePtr->CurveTessellationTol; } }
-        public RangeAccessor<Vector4> Colors => new RangeAccessor<Vector4>(&NativePtr->Colors_0, 43);
+        public RangeAccessor<Vector4> Colors => new RangeAccessor<Vector4>(&NativePtr->Colors_0, 48);
+        public void Destroy()
+        {
+            ImGuiNative.ImGuiStyle_destroy(NativePtr);
+        }
         public void ScaleAllSizes(float scale_factor)
         {
             ImGuiNative.ImGuiStyle_ScaleAllSizes(NativePtr, scale_factor);

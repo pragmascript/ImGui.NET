@@ -32,6 +32,10 @@ namespace ImGuiNET
         public float* GlyphAdvanceX { get { return (float*) &NativePtr->GlyphAdvanceX; } }
         public Vector2* GlyphOffset { get { return (Vector2*) &NativePtr->GlyphOffset; } }
         public ImFontPtr Font => new ImFontPtr(NativePtr->Font);
+        public void Destroy()
+        {
+            ImGuiNative.CustomRect_destroy(NativePtr);
+        }
         public bool IsPacked()
         {
             byte ret = ImGuiNative.CustomRect_IsPacked(NativePtr);

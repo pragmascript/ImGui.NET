@@ -18,5 +18,9 @@ namespace ImGuiNET
         public static implicit operator ImGuiOnceUponAFrame* (ImGuiOnceUponAFramePtr wrappedPtr) { return wrappedPtr.NativePtr; }
         public static implicit operator ImGuiOnceUponAFramePtr(IntPtr nativePtr) { return new ImGuiOnceUponAFramePtr(nativePtr); }
         public int* RefFrame { get { return (int*) &NativePtr->RefFrame; } }
+        public void Destroy()
+        {
+            ImGuiNative.ImGuiOnceUponAFrame_destroy(NativePtr);
+        }
     }
 }
